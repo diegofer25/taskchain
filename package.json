@@ -1,5 +1,7 @@
 {
     "name": "taskchain",
+    "description": "A project for Microsoft AI Agents Hackaton 2025",
+    "author": "Diego Lamarão",
     "private": true,
     "version": "0.0.0",
     "scripts": {
