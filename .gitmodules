@@ -1,0 +1,7 @@
+[submodule "packages/azure-ai-nest"]
+  path = packages/azure-ai-nest
+  url = https://github.com/x2digital/azure-ai-nest.git
+
+[submodule "packages/eslint-config"]
+  path = packages/eslint-config
+  url = https://github.com/x2digital/eslint-config.git
