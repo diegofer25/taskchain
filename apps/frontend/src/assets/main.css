@@ -1,46 +1,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import 'tailwindcss';
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+@theme {
+  /* ───── Tema claro (padrão) ───── */
+  --color-light-bg: #f4fafe;
+  --color-light-surface: #ffffff;
+  --color-light-text: #0d0a24;
+  --color-light-text-2: #475569;
+  --color-light-accent: #1098ad;
+  --color-light-accent-hover: #0e869b;
+  --color-light-link: #0e69b9;
+  --color-light-link-hover: #0b4f8c;
+  --color-light-border: #d1d5db;
+  --color-light-success: #10b981;
+  --color-light-warning: #f59e0b;
+  --color-light-error: #ef4444;
+  --color-light-translucent: rgba(0, 0, 0, 0.1);
+}
 
-:root {
-  --color-bg: #fdf6e3;
-  --color-text: #333333;
-  --color-accent: #b58900;
-  --color-link: #268bd2;
-  --color-border: #ccc;
+@theme .dark {
+  /* ───── Tema escuro via classe .dark ───── */
+  --color-dark-bg: #0d0a24;
+  --color-dark-surface: #151a2f;
+  --color-dark-text: #e5e7eb;
+  --color-dark-text-2: #94a3b8;
+  --color-dark-accent: #4fd1ff;
+  --color-dark-accent-hover: #38bdf8;
+  --color-dark-link: #7dd3fc;
+  --color-dark-link-hover: #60a5fa;
+  --color-dark-border: #2d3148;
+  --color-dark-success: #34d399;
+  --color-dark-warning: #fbbf24;
+  --color-dark-error: #f87171;
+  --color-dark-translucent: rgba(255, 255, 255, 0.1);
 }
 
 body {
-  min-height: 100vh;
+  @apply min-h-screen;
+  @apply bg-light-bg text-light-text;
+  @apply dark:bg-dark-bg dark:text-dark-text;
+  @apply transition-colors duration-1000;
   font-family: 'Inter', sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-}
-
-body.dark {
-  --color-bg: #1c1c1c;
-  --color-text: #dcd0b0;
-  --color-accent: #e5c07b;
-  --color-link: #88c0d0;
-  --color-border: #444;
 }
 
 #app {
-  height: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+  @apply min-h-screen;
 }
