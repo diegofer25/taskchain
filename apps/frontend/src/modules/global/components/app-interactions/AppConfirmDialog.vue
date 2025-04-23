@@ -32,11 +32,11 @@
               <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="sm:flex sm:items-start">
                   <div
-                    class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-ful sm:mx-0 sm:size-10"
+                    class="mx-auto flex size-8 md:size-10 shrink-0 items-center justify-center rounded-ful sm:mx-0 sm:size-10"
                   >
                     <component
                       :is="_iconComponent"
-                      class="size-12 sm-size-10"
+                      class="size-8 md:size-10 rounded-full bg-light-translucent dark:bg-dark-translucent text-light-text dark:text-dark-text"
                       :class="_iconClass"
                       aria-hidden="true"
                     />

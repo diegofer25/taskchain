@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-lg transition-colors duration-1000 bg-light-translucent dark:bg-dark-translucent"
+    class="rounded-lg transition-colors duration-500 bg-light-translucent dark:bg-dark-translucent"
   >
     <textarea
       rows="2"

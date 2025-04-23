@@ -1,6 +1,7 @@
 import enUS from '@/i18n/locales/en-US.json'
 import es from '@/i18n/locales/es.json'
 import ptBr from '@/i18n/locales/pt-BR.json'
+import { useStorage } from '@vueuse/core'
 import { createI18n } from 'vue-i18n'
 
 export const i18nLocales = {
@@ -20,8 +21,10 @@ const messages = Object.entries(i18nLocales).reduce(
   {} as Record<I18nLocale, I18nLocaleMessages>,
 )
 
+const storedLocale = useStorage('locale', 'en-US')
+
 export const i18n = createI18n({
-  locale: 'en-US',
+  locale: storedLocale.value,
   fallbackLocale: 'en-US',
   messages,
 })

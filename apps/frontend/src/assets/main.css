@@ -39,7 +39,7 @@ body {
   @apply min-h-screen;
   @apply bg-light-bg text-light-text;
   @apply dark:bg-dark-bg dark:text-dark-text;
-  @apply transition-colors duration-1000;
+  @apply transition-colors duration-500;
   font-family: 'Inter', sans-serif;
 }
 

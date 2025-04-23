@@ -6,11 +6,12 @@
   "sign_in_with_provider": "Faça login com {provider}",
   "settings": "Configurações",
   "theme": "Tema",
-  "sign_out": "sair",
+  "sign_out": "Sair",
   "ok": "OK",
   "cancel": "Cancelar",
   "confirmation": "Confirmar",
   "are_you_sure_about_this_action": "Você tem certeza sobre esta ação?",
   "are_you_sure_you_want_to_sign_out": "Tem certeza de que deseja sair?",
-  "yes": "Sim"
+  "yes": "Sim",
+  "language": "Linguagem"
 }

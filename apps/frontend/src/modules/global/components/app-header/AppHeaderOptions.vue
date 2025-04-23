@@ -1,32 +1,31 @@
 <template>
-  <div class="flex flex-col gap-4 items-end relative mx-auto container px-2 pt-6 sm:pt-10">
-    <ul role="list" class="border-t border-light-text-2 dark:border-dark-text-2 w-full mt-4">
-      <li class="flex flex-col items-end gap-x-4 py-4 text-right">
-        <p class="text-sm/6 font-semibold text-light-text dark:text-dark-text">
-          {{ t('theme') }}
-        </p>
+  <div class="relative mx-auto container px-2 md:px-4 pt-6 sm:pt-10">
+    <ul
+      role="list"
+      class="flex flex-col gap-4 border-t py-4 border-light-text-2 dark:border-dark-text-2 w-full mt-6"
+    >
+      <AppHeaderOption :title="t('language')" class="gap-2">
+        <AppLanguageSelector />
+      </AppHeaderOption>
+      <AppHeaderOption :title="t('theme')">
         <AppThemeToggle />
-      </li>
-      <li
-        class="flex flex-col items-end gap-x-4 py-4 text-right gap-2"
-        v-if="authStore.isAuthenticated"
-      >
-        <p class="text-sm/6 font-semibold text-light-text dark:text-dark-text">
-          {{ t('sign_out') }}
-        </p>
+      </AppHeaderOption>
+      <AppHeaderOption :title="t('sign_out')" v-if="authStore.isAuthenticated">
         <button
           @click="signOut"
           class="flex items-center gap-x-1 outline-0 cursor-pointer bg-light-translucent hover:bg-dark-error text-dark-text p-2 rounded-full"
         >
           <ArrowRightStartOnRectangleIcon class="size-5" aria-hidden="true" />
         </button>
-      </li>
+      </AppHeaderOption>
     </ul>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useAuthStore } from '@/modules/auth/stores/auth.store'
+import AppHeaderOption from '@/modules/global/components/app-header/AppHeaderOption.vue'
+import AppLanguageSelector from '@/modules/global/components/AppLanguageSelector.vue'
 import AppThemeToggle from '@/modules/global/components/AppThemeToggle.vue'
 import { useInteractionsStore } from '@/modules/global/stores/interactions.store'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/16/solid'

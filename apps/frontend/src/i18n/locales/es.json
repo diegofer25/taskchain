@@ -6,11 +6,12 @@
   "sign_in_with_provider": "Iniciar sesión con {provider}",
   "settings": "Ajustes",
   "theme": "Tema",
-  "sign_out": "desconectar",
+  "sign_out": "Desconectar",
   "ok": "De acuerdo",
   "cancel": "Cancelar",
   "confirmation": "Confirmar",
   "are_you_sure_about_this_action": "¿Estás seguro de esta acción?",
   "are_you_sure_you_want_to_sign_out": "¿Estás seguro de que quieres cerrar sesión?",
-  "yes": "Sí"
+  "yes": "Sí",
+  "language": "Idioma"
 }

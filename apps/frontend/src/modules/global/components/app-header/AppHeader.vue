@@ -1,11 +1,11 @@
 <template>
   <Popover class="relative isolate z-50" v-slot="{ open }">
-    <div class="flex justify-between items-center p-2 container mx-auto">
+    <div class="flex justify-between items-center px-2 py-2 md:px-4 container mx-auto">
       <RouterLink to="/">
-        <img :src="logoImage" alt="Taskchain logo" class="h-10 w-auto" />
+        <img :src="logoImage" alt="Taskchain logo" class="h-6 md:h-10 w-auto" />
       </RouterLink>
       <div class="max-w-7xl">
-        <div class="flex gap-4 items-center">
+        <div class="flex gap-2 md:gap-4 items-center">
           <Transition
             name="fade"
             enter-active-class="transition ease-out duration-200"
@@ -15,7 +15,7 @@
             leave-from-class="opacity-100"
             leave-to-class="opacity-0"
           >
-            <div class="flex flex-col" v-if="open">
+            <div class="flex flex-col text-ellipsis max-w-32 md:max-w-fit" v-if="open">
               <p class="text-sm/6 font-semibold text-light-text dark:text-dark-text">
                 {{ authStore.user?.displayName }}
               </p>
@@ -28,12 +28,23 @@
             class="inline-flex items-center gap-x-1 outline-0 cursor-pointer hover:bg-light-translucent dark:hover:bg-dark-translucent p-2 rounded-full"
             ref="popoverButtonRef"
           >
-            <img
-              class="size-8 rounded-full"
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              alt=""
-              v-if="authStore.isAuthenticated"
-            />
+            <template v-if="authStore.isAuthenticated">
+              <img
+                class="size-8 md:size-10 rounded-full"
+                :src="authStore.user?.photoURL"
+                alt=""
+                v-if="authStore.user?.photoURL"
+              />
+              <div
+                v-else
+                class="size-10 md:size-10 rounded-full flex items-center justify-center bg-light-translucent dark:bg-dark-translucent text-light-text dark:text-dark-text"
+              >
+                <span class="text-sm/6 font-semibold">
+                  {{ firstLetterNames }}
+                </span>
+              </div>
+            </template>
+
             <EllipsisVerticalIcon
               v-else
               class="size-5 text-light-text dark:text-dark-text"
@@ -72,6 +83,10 @@ import { computed, onMounted, ref } from 'vue'
 const globalStore = useGlobalStore()
 const authStore = useAuthStore()
 const popoverButtonRef = ref<HTMLElement | null>(null)
+const firstLetterNames = computed(() => {
+  const names = authStore.user?.displayName?.split(' ') ?? []
+  return names[0].charAt(0) + (names[1]?.charAt(0) ?? '')
+})
 
 onMounted(() => {
   console.log('Popover button ref:', popoverButtonRef.value)

@@ -1,7 +1,7 @@
 <template>
   <canvas
     ref="riveCanvas"
-    class="w-24 cursor-pointer transition-all duration-1000 ease-in-out"
+    class="w-16 cursor-pointer transition-all duration-1000 ease-in-out"
     @click="onClick"
   ></canvas>
 </template>

@@ -18,7 +18,6 @@
 import { useAuthStore } from '@/modules/auth/stores/auth.store'
 import { waitForAuthCheck } from '@/modules/global/services/firebase.service'
 import { useInteractionsStore } from '@/modules/global/stores/interactions.store'
-import type { UserCredential } from 'firebase/auth'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
@@ -42,17 +41,13 @@ const { googleSignIn, microsoftSignIn } = useAuthStore()
 
 async function signIn(provider: Provider) {
   try {
-    let credentials: UserCredential | null = null
-
     if (provider === 'Google') {
-      credentials = await googleSignIn()
+      await googleSignIn()
     } else if (provider === 'Microsoft') {
-      credentials = await microsoftSignIn()
+      await microsoftSignIn()
     }
 
     await waitForAuthCheck()
-
-    console.log('User:', credentials)
 
     router.push({ name: 'TasksHome' })
   } catch (e) {
