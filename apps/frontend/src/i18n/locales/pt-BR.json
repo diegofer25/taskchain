@@ -1,3 +1,16 @@
 {
-  "login": "Login"
+  "login": "Login",
+  "generate": "Gerar",
+  "an_error_occurred": "Ocorreu um erro",
+  "an_error_occurred_while_signing_in": "Ocorreu um erro ao tentar fazer login com o provedor {provider}",
+  "sign_in_with_provider": "Faça login com {provider}",
+  "settings": "Configurações",
+  "theme": "Tema",
+  "sign_out": "sair",
+  "ok": "OK",
+  "cancel": "Cancelar",
+  "confirmation": "Confirmar",
+  "are_you_sure_about_this_action": "Você tem certeza sobre esta ação?",
+  "are_you_sure_you_want_to_sign_out": "Tem certeza de que deseja sair?",
+  "yes": "Sim"
 }

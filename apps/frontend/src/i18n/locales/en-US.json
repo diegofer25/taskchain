@@ -1,3 +1,16 @@
 {
-  "login": "Login"
+  "login": "Login",
+  "generate": "To generate",
+  "an_error_occurred": "An error occurred",
+  "an_error_occurred_while_signing_in": "An error occurred when trying to login with the provider {provider}",
+  "sign_in_with_provider": "Sign in with {provider}",
+  "settings": "Settings",
+  "theme": "Theme",
+  "sign_out": "Sign out",
+  "ok": "Ok",
+  "cancel": "Cancel",
+  "confirmation": "Confirm",
+  "are_you_sure_about_this_action": "Are you sure about this action?",
+  "are_you_sure_you_want_to_sign_out": "Are you sure you want to sign out?",
+  "yes": "Yes"
 }

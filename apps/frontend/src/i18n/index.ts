@@ -1,18 +1,27 @@
-import { i18nLocales, type I18nLocale, type I18nLocaleMessages } from '@/i18n/locales'
+import enUS from '@/i18n/locales/en-US.json'
+import es from '@/i18n/locales/es.json'
+import ptBr from '@/i18n/locales/pt-BR.json'
 import { createI18n } from 'vue-i18n'
+
+export const i18nLocales = {
+  'en-US': enUS,
+  'pt-BR': ptBr,
+  es: es,
+} as const
+
+export type I18nLocale = keyof typeof i18nLocales
+export type I18nLocaleMessages = (typeof i18nLocales)[I18nLocale]
+
+const messages = Object.entries(i18nLocales).reduce(
+  (acc, [key, message]: [string, I18nLocaleMessages]) => {
+    acc[key as I18nLocale] = message
+    return acc
+  },
+  {} as Record<I18nLocale, I18nLocaleMessages>,
+)
 
 export const i18n = createI18n({
   locale: 'en-US',
   fallbackLocale: 'en-US',
-  messages: {
-    ...Object.entries(i18nLocales).reduce(
-      (acc, [key, message]: [string, I18nLocaleMessages]) => {
-        acc[key as I18nLocale] = {
-          message,
-        }
-        return acc
-      },
-      {} as Record<I18nLocale, { message: I18nLocaleMessages }>,
-    ),
-  },
+  messages,
 })
