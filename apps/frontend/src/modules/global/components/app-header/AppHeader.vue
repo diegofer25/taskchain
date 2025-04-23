@@ -26,7 +26,6 @@
           </Transition>
           <PopoverButton
             class="inline-flex items-center gap-x-1 outline-0 cursor-pointer hover:bg-light-translucent dark:hover:bg-dark-translucent p-2 rounded-full"
-            ref="popoverButtonRef"
           >
             <template v-if="authStore.isAuthenticated">
               <img
@@ -78,18 +77,12 @@ import AppHeaderOptions from '@/modules/global/components/app-header/AppHeaderOp
 import { useGlobalStore } from '@/modules/global/stores/global.store'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { EllipsisVerticalIcon } from '@heroicons/vue/16/solid'
-import { computed, onMounted, ref } from 'vue'
+import { computed } from 'vue'
 
 const globalStore = useGlobalStore()
 const authStore = useAuthStore()
-const popoverButtonRef = ref<HTMLElement | null>(null)
 const firstLetterNames = computed(() => {
-  const names = authStore.user?.displayName?.split(' ') ?? []
-  return names[0].charAt(0) + (names[1]?.charAt(0) ?? '')
-})
-
-onMounted(() => {
-  console.log('Popover button ref:', popoverButtonRef.value)
+  return authStore.firstName.charAt(0) + (authStore.lastName.charAt(0) ?? '')
 })
 
 const logoImage = computed(() =>

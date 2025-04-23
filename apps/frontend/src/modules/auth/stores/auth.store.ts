@@ -1,21 +1,53 @@
 import { auth } from '@/modules/global/services/firebase.service'
-import type { User } from 'firebase/auth'
-import { getIdTokenResult, GoogleAuthProvider, OAuthProvider, signInWithPopup } from 'firebase/auth'
+import { useLocalStorage } from '@vueuse/core'
+import type { OAuthCredential, User } from 'firebase/auth'
+import { GoogleAuthProvider, OAuthProvider, signInWithPopup } from 'firebase/auth'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
+  const storedMsOAuthCredential = useLocalStorage<OAuthCredential>(
+    'msAccessToken',
+    {} as OAuthCredential,
+    { deep: true },
+  )
   const user = ref<User | null>(null)
   const isAuthenticated = computed(() => !!user.value)
+  const firstName = computed(() => user.value?.displayName?.split(' ')[0] || '')
+  const lastName = computed(() => user.value?.displayName?.split(' ')[1] || '')
 
-  auth.onAuthStateChanged((_user) => (user.value = _user))
+  auth.onAuthStateChanged(async (_user) => {
+    if (_user) {
+      user.value = _user
+
+      if (
+        _user.providerData[0]?.providerId === 'microsoft.com' &&
+        storedMsOAuthCredential.value.accessToken
+      ) {
+        try {
+          const photoURL = await fetchMsUserProfilePicture(
+            storedMsOAuthCredential.value.accessToken,
+          )
+          setUser({ ..._user, photoURL })
+        } catch (error) {
+          console.error('Error fetching Microsoft user profile picture:', error)
+        }
+      }
+    }
+  })
 
   return {
     isAuthenticated,
     user,
+    firstName,
+    lastName,
     googleSignIn,
     microsoftSignIn,
     signOut,
+  }
+
+  function setUser(_user: User | null) {
+    user.value = _user
   }
 
   function googleSignIn() {
@@ -29,28 +61,37 @@ export const useAuthStore = defineStore('auth', () => {
     provider.addScope('Calendars.ReadWrite')
 
     const response = await signInWithPopup(auth, provider)
+    const credential = OAuthProvider.credentialFromResult(response)
 
-    console.log('Microsoft sign-in response:', response)
+    if (credential && credential.accessToken) {
+      storedMsOAuthCredential.value = credential
 
-    setTimeout(() => {
-      getIdTokenResult(response.user)
-        .then((token) => {
-          console.log('Token:', token)
-        })
-        .catch((error) => {
-          console.error('Error fetching token:', error)
-        })
-    }, 3000)
+      const photoURL = await fetchMsUserProfilePicture(credential.accessToken)
+      setUser({ ...response.user, photoURL })
+    }
   }
 
-  function signOut() {
-    return auth.signOut()
+  async function signOut() {
+    await auth.signOut()
+    storedMsOAuthCredential.value = {} as OAuthCredential
+    setUser(null)
   }
 
-  // async function fetchMsUserProfilePicture(token: string) {
-  //   const photoResp = await fetch('https://graph.microsoft.com/v1.0/me/photo/$value', {
-  //     headers: { Authorization: `Bearer ${token}` },
-  //   })
-  //   return photoResp.blob()
-  // }
+  async function fetchMsUserProfilePicture(token: string) {
+    try {
+      const response = await fetch('https://graph.microsoft.com/v1.0/me/photo/$value', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const blob = await response.blob()
+      return URL.createObjectURL(blob)
+    } catch (error) {
+      console.log('Error fetching Microsoft user profile picture:', JSON.stringify(error, null, 2))
+      return null
+    }
+  }
 })

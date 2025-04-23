@@ -1,6 +1,6 @@
 {
   "login": "Login",
-  "generate": "Para generar",
+  "generate": "Generar",
   "an_error_occurred": "Ocurrió un error",
   "an_error_occurred_while_signing_in": "Se produjo un error al intentar iniciar sesión con el proveedor {provider}",
   "sign_in_with_provider": "Iniciar sesión con {provider}",
@@ -13,5 +13,15 @@
   "are_you_sure_about_this_action": "¿Estás seguro de esta acción?",
   "are_you_sure_you_want_to_sign_out": "¿Estás seguro de que quieres cerrar sesión?",
   "yes": "Sí",
-  "language": "Idioma"
+  "language": "Idioma",
+  "taskchain_home_main_title": "De un objetivo vago para despejar el plan en segundos.",
+  "taskchain_home_main_subtitle": "Alimente el motor con su objetivo. Taskchain dibuja la ruta a la órbita del éxito",
+  "taskchain_home_main_placeholder_1": "Lanza mi primer curso en línea en 60 días",
+  "taskchain_home_main_placeholder_2": "Dobla mis ingresos independientes hasta diciembre",
+  "taskchain_home_main_placeholder_3": "Aprende Python en 8 semanas",
+  "taskchain_home_main_placeholder_4": "Perder 5 kg de salud antes del verano",
+  "taskchain_home_main_placeholder_5": "Lea toda la Biblia en 6 meses",
+  "taskchain_home_main_placeholder_6": "Migra mi infraestructura a Azure hasta el final del trimestre",
+  "taskchain_home_main_placeholder_7": "Planifique y haga un viaje por carretera de 15 días por Brasil",
+  "hello_name": "Hola <b> {name}</b>!"
 }

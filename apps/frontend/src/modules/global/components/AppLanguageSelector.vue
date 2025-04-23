@@ -2,7 +2,7 @@
   <Menu as="div" class="relative inline-block text-left">
     <div>
       <MenuButton
-        class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+        class="cursor-pointer inline-flex w-full justify-center gap-x-1.5 rounded-md bg-light-bg dark:bg-dark-bg px-3 py-2 text-sm font-semibold text-light-text dark:text-dark-text shadow-xs ring-1 ring-light-text-2 dark:ring-dark-text-2 ring-inset hover:bg-light-translucent dark:hover:bg-dark-translucent"
       >
         <img :src="currentFlag" :alt="currentLocale" class="size-5 rounded-full" />
         <ChevronDownIcon class="-mr-1 size-5 text-gray-400" aria-hidden="true" />
@@ -18,15 +18,17 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <MenuItems
-        class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
+        class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-light-text-2 dark:divide-dark-text-2 rounded-md bg-light-bg dark:bg-dark-bg shadow-lg ring-1 ring-light-text-2 dark:ring-dark-text-2 focus:outline-hidden"
       >
         <div class="py-1">
           <MenuItem v-slot="{ active }" v-for="locale in availableLocales" :key="locale">
             <a
               @click="() => setLanguage(locale)"
               :class="[
-                active ? 'bg-gray-100 text-gray-900 outline-hidden' : 'text-gray-700',
-                'group flex items-center px-4 py-2 text-sm gap-2',
+                active
+                  ? 'bg-light-translucent dark:bg-dark-translucent text-light-text dark:text-dark-text outline-hidden'
+                  : 'text-light-text-2 dark:text-dark-text-2',
+                'group flex items-center px-4 py-2 text-sm gap-2 cursor-pointer',
               ]"
             >
               <img :src="FLAGS[locale]" :alt="currentLocale" class="size-5 rounded-full" />

@@ -57,6 +57,7 @@ export function useRive<I extends ReadonlyArray<StrictInput>>(options: UseRiveOp
      * ```
      */
     getInput,
+    getInstance: () => rive,
   }
 
   async function getInput(name: I[number]['name']) {
@@ -121,6 +122,7 @@ export function useRive<I extends ReadonlyArray<StrictInput>>(options: UseRiveOp
       return
     }
     loaded = true
+    rive.resizeDrawingSurfaceToCanvas()
     const inputsObject = getInputsObjects(rive)
     const entries = Object.entries(inputsObject) as Array<[string, StateMachineInput]>
 

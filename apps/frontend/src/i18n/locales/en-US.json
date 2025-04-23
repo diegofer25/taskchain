@@ -1,6 +1,6 @@
 {
   "login": "Login",
-  "generate": "To generate",
+  "generate": "Generate",
   "an_error_occurred": "An error occurred",
   "an_error_occurred_while_signing_in": "An error occurred when trying to login with the provider {provider}",
   "sign_in_with_provider": "Sign in with {provider}",
@@ -13,5 +13,15 @@
   "are_you_sure_about_this_action": "Are you sure about this action?",
   "are_you_sure_you_want_to_sign_out": "Are you sure you want to sign out?",
   "yes": "Yes",
-  "language": "Language"
+  "language": "Language",
+  "taskchain_home_main_title": "Of a vague goal to clear plan in seconds.",
+  "taskchain_home_main_subtitle": "Feed the engine with its goal. \nTaskchain draws the route to the orbit of success",
+  "taskchain_home_main_placeholder_1": "Launch my first online course in 60 days",
+  "taskchain_home_main_placeholder_3": "Learn python in 8 weeks",
+  "taskchain_home_main_placeholder_4": "Lose 5 kg healthy before summer",
+  "taskchain_home_main_placeholder_5": "Read the whole Bible in 6 months",
+  "taskchain_home_main_placeholder_6": "Migrate my infrastructure to Azure until the end of the quarter",
+  "taskchain_home_main_placeholder_7": "Plan and make a 15 -day Road Trip throughout Brazil",
+  "taskchain_home_main_placeholder_2": "Fold my freelance revenue until December",
+  "hello_name": "Hello <b>{name}</b>!"
 }

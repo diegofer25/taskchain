@@ -13,5 +13,15 @@
   "are_you_sure_about_this_action": "Você tem certeza sobre esta ação?",
   "are_you_sure_you_want_to_sign_out": "Tem certeza de que deseja sair?",
   "yes": "Sim",
-  "language": "Linguagem"
+  "language": "Linguagem",
+  "taskchain_home_main_title": "Conte-nos uma meta e veja como criamos um plano claro em segundos.",
+  "taskchain_home_main_subtitle": "Alimente o motor com seu objetivo. O TaskChain traça a rota até a órbita do sucesso",
+  "taskchain_home_main_placeholder_1": "Lançar meu primeiro curso online em 60 dias",
+  "taskchain_home_main_placeholder_2": "Dobrar meu faturamento de freelances até dezembro",
+  "taskchain_home_main_placeholder_3": "Aprender Python em 8 semanas",
+  "taskchain_home_main_placeholder_4": "Perder 5 kg com saúde antes do verão",
+  "taskchain_home_main_placeholder_5": "Ler a Bíblia inteira em 6 meses",
+  "taskchain_home_main_placeholder_6": "Migrar minha infraestrutura para Azure até o fim do trimestre",
+  "taskchain_home_main_placeholder_7": "Planejar e fazer uma road trip de 15 dias pelo Sul do Brasil",
+  "hello_name": "Olá <b>{name}</b>!"
 }

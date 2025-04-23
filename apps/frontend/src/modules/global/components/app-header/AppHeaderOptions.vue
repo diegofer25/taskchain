@@ -45,9 +45,7 @@ async function signOut() {
   })
   if (confirmed) {
     await authStore.signOut()
-    router.push({ name: 'Auth' })
-  } else {
-    console.log('User cancelled sign out')
+    await router.push({ name: 'Auth' })
   }
 }
 </script>
