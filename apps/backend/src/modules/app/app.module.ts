@@ -1,29 +1,15 @@
-import { AzureAiModule } from '@x2d/azure-ai-nest';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { AppController } from 'src/modules/app/app.controller';
+import { AppService } from 'src/modules/app/app.service';
+import { AuthModule } from 'src/modules/auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env'],
     }),
-    AzureAiModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        const connectionString = config.get<string>('AZURE_AI_PROJECTS_CONNECTION_STRING');
-
-        if (!connectionString) {
-          throw new Error('AZURE_AI_PROJECTS_CONNECTION_STRING is not defined');
-        }
-
-        return {
-          connectionString,
-        };
-      },
-    }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
