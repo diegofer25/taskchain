@@ -1,15 +1,15 @@
 <template>
   <form @submit.prevent class="flex flex-col min-w-80 w-full">
     <div class="flex flex-col text-center">
-      <h1 class="text-xl md:text-2xl text-light-text dark:text-dark-text mb-4">
+      <h1 class="text-lg sm:text-xl md:text-2xl text-light-text dark:text-dark-text mb-4">
         <span v-html="t('hello_name', { name: authStore.firstName })"></span>
         <br />
         {{ t('taskchain_home_main_title') }}
       </h1>
 
-      <canvas ref="canvasRef" class="h-auto w-1/2 self-center"> </canvas>
+      <canvas ref="canvasRef" class="h-auto w-1/2 max-w-96 self-center"> </canvas>
 
-      <p class="text-md md:text-lg text-light-text-2 dark:text-dark-text-2 mb-4">
+      <p class="text-sm text:text-md md:text-lg text-light-text-2 dark:text-dark-text-2 mb-4">
         {{ t('taskchain_home_main_subtitle') }}
       </p>
     </div>

@@ -83,7 +83,10 @@ export const useAuthStore = defineStore('auth', () => {
         headers: { Authorization: `Bearer ${token}` },
       })
 
-      if (!response.ok) {
+      if (response.status === 401) {
+        console.log('Unauthorized request. Please check the access token.')
+        return null
+      } else if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 

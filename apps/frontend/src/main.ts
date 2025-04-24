@@ -4,6 +4,7 @@ import { i18n } from '@/i18n'
 import { waitForAuthCheck } from '@/modules/global/services/firebase.service'
 import router from '@/router'
 import { RuntimeLoader } from '@rive-app/webgl'
+import FontFaceObserver from 'fontfaceobserver'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
@@ -21,7 +22,14 @@ async function loadAppDependencies({ riveUrl }: LoadAppDependenciesOptions = {})
     RuntimeLoader.setWasmUrl(riveUrl)
   }
   try {
-    await Promise.all([RuntimeLoader.awaitInstance(), waitForAuthCheck()])
+    await Promise.all([
+      // Rive WASM
+      RuntimeLoader.awaitInstance(),
+      // Auth check
+      waitForAuthCheck(),
+      // Font loading
+      new FontFaceObserver('Inter').load(),
+    ])
     if (appEl) {
       createApp(App).use(i18n).use(createPinia()).use(router).mount(appEl)
     }
