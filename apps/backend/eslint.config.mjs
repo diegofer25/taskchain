@@ -1,12 +1,17 @@
 // @ts-check
 import eslint from '@eslint/js';
+import x2dEslintConfig from '@x2d/eslint-config';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import x2dEslintConfig from '@x2d/eslint-config';
 
 export default tseslint.config(
-  ...x2dEslintConfig,
+  {
+    files: ['**/*.{ts}'],
+    extends: [
+      x2dEslintConfig,
+    ],
+  },
   {
     ignores: ['eslint.config.mjs'],
   },
@@ -31,7 +36,9 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn'
+      '@typescript-eslint/no-unsafe-argument': 'warn',
+      // tab spaces 2
+      "indent": ["error", 2]
     },
   },
 );
