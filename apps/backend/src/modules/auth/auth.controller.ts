@@ -1,30 +1,22 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Headers,
-  Post,
-} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { AuthPubSubResponse } from '@taskchain/types';
+import { DecodedIdToken } from 'firebase-admin/auth';
 import { AuthService } from 'src/modules/auth/auth.service';
+import { FirebaseUser } from 'src/modules/firebase/firebase.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly service: AuthService) {}
 
-  @Post('pubsub')
+  @Get('pubsub')
   async authPubSub(
-    @Headers('authorization') authHeader?: string,
-    @Body('idToken') idTokenBody?: string,
-  ) {
-    // Prioriza Bearer header; fallback para body
-    const token = authHeader?.startsWith('Bearer ')
-      ? authHeader.slice(7)
-      : idTokenBody;
+    @FirebaseUser() user: DecodedIdToken,
+  ): Promise<AuthPubSubResponse> {
+    return this.service.getPubSubSas(user.uid);
+  }
 
-    if (!token) {
-      throw new BadRequestException('Missing Auth token');
-    }
-
-    return this.service.getPubSubSas(token);
+  @Get('speech')
+  getAzureTtsToken(): Promise<{ token: string; region: string }> {
+    return this.service.getAzureTtsToken();
   }
 }

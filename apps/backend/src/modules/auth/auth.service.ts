@@ -1,31 +1,23 @@
 import { WebPubSubServiceClient } from '@azure/web-pubsub';
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { Auth, DecodedIdToken } from 'firebase-admin/auth';
-import { FIREBASE_AUTH } from 'src/modules/firebase/firebase.module';
-import { PUBSUB_CLIENT } from 'src/modules/pubsub/pubsub.provider';
+import { HttpService } from '@nestjs/axios';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PUBSUB_CLIENT } from 'src/modules/pubsub/pubsub.module';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(FIREBASE_AUTH) private readonly auth: Auth,
     @Inject(PUBSUB_CLIENT) private readonly pubSub: WebPubSubServiceClient,
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
   ) {}
 
-  /** Validate Firebase token and generate SAS for Web PubSub */
-  async getPubSubSas(idToken: string) {
-    if (!idToken) throw new UnauthorizedException('Missing Firebase token');
-
-    // 1. Verify Firebase token
-    let decoded: DecodedIdToken;
-    try {
-      decoded = await this.auth.verifyIdToken(idToken);
-    } catch {
-      throw new UnauthorizedException('Invalid token');
-    }
-
-    const uid = decoded.uid; // user id
-
-    // 3. Generate Web PubSub token with 24h expiration
+  /** Generate SAS for Web PubSub */
+  async getPubSubSas(uid: string) {
     const { url, token } = await this.pubSub.getClientAccessToken({
       userId: uid,
       roles: ['webpubsub.joinLeaveGroup'],
@@ -33,5 +25,24 @@ export class AuthService {
     });
 
     return { url, token };
+  }
+
+  async getAzureTtsToken() {
+    const region = this.configService.get<string>('AZURE_SPEECH_REGION');
+    if (!region) {
+      throw new InternalServerErrorException('AZURE_SPEECH_REGION is not set');
+    }
+    const { data } = await this.httpService.axiosRef.post<string>(
+      `https://${region}.api.cognitive.microsoft.com/sts/v1.0/issueToken`,
+      {},
+      {
+        headers: {
+          'Ocp-Apim-Subscription-Key':
+            this.configService.get<string>('AZURE_SPEECH_KEY'),
+        },
+      },
+    );
+
+    return { token: data, region };
   }
 }
