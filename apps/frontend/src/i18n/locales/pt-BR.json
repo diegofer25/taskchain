@@ -23,5 +23,14 @@
   "taskchain_home_main_placeholder_5": "Ler a Bíblia inteira em 6 meses",
   "taskchain_home_main_placeholder_6": "Migrar minha infraestrutura para Azure até o fim do trimestre",
   "taskchain_home_main_placeholder_7": "Planejar e fazer uma road trip de 15 dias pelo Sul do Brasil",
-  "hello_name": "Olá <b>{name}</b>!"
+  "hello_name": "Olá {name}!",
+  "auth": "Auth",
+  "http-error-status-response-status": "HTTP error! status: {0}",
+  "failed-to-refresh-microsoft-token": "Failed to refresh Microsoft token",
+  "bearer-token": "Bearer {0}",
+  "microsoft-0": "Microsoft",
+  "google-1": "Google",
+  "microsoft": "Microsoft",
+  "google-0": "Google",
+  "google": "Google"
 }

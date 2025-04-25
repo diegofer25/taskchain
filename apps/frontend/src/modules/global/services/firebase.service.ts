@@ -14,7 +14,7 @@ export const auth = getAuth(app)
 
 export async function waitForAuthCheck() {
   return new Promise<User | null>((resolve) => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       unsubscribe()
       resolve(user)
     })

@@ -1,0 +1,21 @@
+import { useAuthStore } from '@/modules/auth/stores/auth.store'
+import { createFetch } from '@vueuse/core'
+
+export const useAppFetch = createFetch({
+  baseUrl: '/api',
+  options: {
+    async beforeFetch({ options }) {
+      const authStore = useAuthStore()
+      const token = await authStore.user?.getIdToken()
+
+      if (options.headers && token) {
+        ;(options.headers as Record<string, string>)['Authorization'] = `Bearer ${token}`
+      }
+
+      return { options }
+    },
+  },
+  fetchOptions: {
+    mode: 'cors',
+  },
+})

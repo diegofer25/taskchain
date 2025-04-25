@@ -1,3 +1,4 @@
+import { AiVoiceState } from '@/modules/global/types/ai-voice.types'
 import { breakpointsTailwind, useBreakpoints, useMediaQuery, useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
@@ -5,6 +6,7 @@ import { computed, ref } from 'vue'
 export const useGlobalStore = defineStore('global', () => {
   const isPreferredDark = useMediaQuery('(prefers-color-scheme: dark)')
   const userDefaultTheme = isPreferredDark.value ? 'dark' : 'light'
+  const aiVoiceState = ref(AiVoiceState.THINKING)
 
   const savedTheme = useStorage<'light' | 'dark'>('theme', userDefaultTheme)
 
@@ -14,7 +16,7 @@ export const useGlobalStore = defineStore('global', () => {
 
   applyTheme()
 
-  return { theme, breakpoints, isDark, toggleTheme }
+  return { theme, breakpoints, isDark, aiVoiceState, toggleTheme }
 
   function toggleTheme() {
     theme.value = theme.value === 'light' ? 'dark' : 'light'

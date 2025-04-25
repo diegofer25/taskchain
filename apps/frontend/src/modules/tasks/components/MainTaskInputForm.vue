@@ -1,17 +1,13 @@
 <template>
   <form @submit.prevent class="flex flex-col min-w-80 w-full">
     <div class="flex flex-col text-center">
-      <h1 class="text-lg sm:text-xl md:text-2xl text-light-text dark:text-dark-text mb-4">
-        <span v-html="t('hello_name', { name: authStore.firstName })"></span>
+      <!-- <h1 class="text-lg sm:text-xl md:text-2xl text-light-text dark:text-dark-text mb-4">
+        <span v-text="t('hello_name', { name: authStore.firstName })"></span>
         <br />
         {{ t('taskchain_home_main_title') }}
-      </h1>
+      </h1> -->
 
-      <canvas ref="canvasRef" class="h-auto w-1/2 max-w-96 self-center"> </canvas>
-
-      <p class="text-sm text:text-md md:text-lg text-light-text-2 dark:text-dark-text-2 mb-4">
-        {{ t('taskchain_home_main_subtitle') }}
-      </p>
+      <AppAiVoiceAnimation class="h-auto w-1/2 max-w-96 self-center" />
     </div>
 
     <PromptInput v-model="goalInput" />
@@ -31,25 +27,24 @@
 
 <script lang="ts" setup>
 import { useAuthStore } from '@/modules/auth/stores/auth.store'
+import AppAiVoiceAnimation from '@/modules/global/components/AppAiVoiceAnimation.vue'
 import { useRive } from '@/modules/global/composables/use-rive'
+import { useSpeech } from '@/modules/global/composables/use-speech'
 import PromptInput from '@/modules/tasks/components/PromptInput.vue'
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t, locale } = useI18n()
 const authStore = useAuthStore()
+const { speak } = useSpeech()
 const goalInput = ref<string>('')
-const canvasRef = ref<HTMLCanvasElement | null>(null)
 const buttonAnimationCanvasRef = ref<HTMLCanvasElement | null>(null)
+const startMessage = `${t('hello_name', { name: authStore.firstName })} ${t('taskchain_home_main_title')}`
 
-watch(locale, () => {
-  getInstance()?.setTextRunValue('label', t('generate'))
-})
+watch(locale, () => getInstance()?.setTextRunValue('label', t('generate')))
 
-useRive({
-  canvasRef,
-  src: new URL('@/assets/animations/businessman_with_rocket.riv', import.meta.url).href,
-})
+onMounted(() => speak(startMessage))
+
 const { getInstance } = useRive({
   canvasRef: buttonAnimationCanvasRef,
   src: new URL('@/assets/animations/form_button.riv', import.meta.url).href,

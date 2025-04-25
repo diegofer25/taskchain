@@ -41,6 +41,7 @@ body {
   @apply dark:bg-dark-bg dark:text-dark-text;
   @apply transition-colors duration-500;
   font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
 }
 
 #app {

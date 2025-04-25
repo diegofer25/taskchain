@@ -16,8 +16,9 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '@/modules/auth/stores/auth.store'
-import { waitForAuthCheck } from '@/modules/global/services/firebase.service'
+import { useGlobalLoading } from '@/modules/global/composables/use-global-loading'
 import { useInteractionsStore } from '@/modules/global/stores/interactions.store'
+import { requestTokensDependentsOnFbToken } from '@/modules/global/utils/initialization.utils'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
@@ -38,6 +39,7 @@ const { t } = useI18n()
 const router = useRouter()
 const { showNotification } = useInteractionsStore()
 const { googleSignIn, microsoftSignIn } = useAuthStore()
+const { show, hide } = useGlobalLoading()
 
 async function signIn(provider: Provider) {
   try {
@@ -46,8 +48,9 @@ async function signIn(provider: Provider) {
     } else if (provider === 'Microsoft') {
       await microsoftSignIn()
     }
-
-    await waitForAuthCheck()
+    show()
+    await requestTokensDependentsOnFbToken()
+    hide()
 
     router.push({ name: 'TasksHome' })
   } catch (e) {

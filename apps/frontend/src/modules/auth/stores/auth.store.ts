@@ -1,15 +1,19 @@
 import { auth } from '@/modules/global/services/firebase.service'
-import { useLocalStorage } from '@vueuse/core'
+import { useStorage } from '@vueuse/core'
 import type { OAuthCredential, User } from 'firebase/auth'
-import { GoogleAuthProvider, OAuthProvider, signInWithPopup } from 'firebase/auth'
+import {
+  GoogleAuthProvider,
+  OAuthProvider,
+  reauthenticateWithPopup,
+  signInWithPopup,
+} from 'firebase/auth'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
-  const storedMsOAuthCredential = useLocalStorage<OAuthCredential>(
+  const storedMsOAuthCredential = useStorage<OAuthCredential>(
     'msAccessToken',
     {} as OAuthCredential,
-    { deep: true },
   )
   const user = ref<User | null>(null)
   const isAuthenticated = computed(() => !!user.value)
@@ -84,17 +88,43 @@ export const useAuthStore = defineStore('auth', () => {
       })
 
       if (response.status === 401) {
-        console.log('Unauthorized request. Please check the access token.')
-        return null
+        const _token = await refreshMicrosoftToken()
+
+        if (!_token) {
+          throw new Error('Failed to refresh Microsoft token')
+        }
+        console.log('Token refreshed successfully')
+        return await fetchMsUserProfilePicture(_token)
       } else if (!response.ok) {
+        console.error('Error fetching Microsoft user profile picture:', response)
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 
       const blob = await response.blob()
       return URL.createObjectURL(blob)
     } catch (error) {
-      console.log('Error fetching Microsoft user profile picture:', JSON.stringify(error, null, 2))
+      console.log('Error fetching Microsoft user profile picture:')
+      console.error(error)
+
       return null
     }
+  }
+
+  async function refreshMicrosoftToken(): Promise<string | null> {
+    if (!auth.currentUser) return null
+
+    const provider = new OAuthProvider('microsoft.com')
+    provider.addScope('Mail.Read')
+    provider.addScope('User.Read')
+    provider.addScope('Calendars.ReadWrite')
+
+    const response = await reauthenticateWithPopup(auth.currentUser, provider)
+    const credential = OAuthProvider.credentialFromResult(response)
+
+    if (credential?.accessToken) {
+      storedMsOAuthCredential.value = credential
+      return credential.accessToken
+    }
+    return null
   }
 })

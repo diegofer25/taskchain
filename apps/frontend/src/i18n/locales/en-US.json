@@ -23,5 +23,5 @@
   "taskchain_home_main_placeholder_6": "Migrate my infrastructure to Azure until the end of the quarter",
   "taskchain_home_main_placeholder_7": "Plan and make a 15 -day Road Trip throughout Brazil",
   "taskchain_home_main_placeholder_2": "Fold my freelance revenue until December",
-  "hello_name": "Hello <b>{name}</b>!"
+  "hello_name": "Hello {name}!"
 }

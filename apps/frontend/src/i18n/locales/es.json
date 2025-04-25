@@ -23,5 +23,5 @@
   "taskchain_home_main_placeholder_5": "Lea toda la Biblia en 6 meses",
   "taskchain_home_main_placeholder_6": "Migra mi infraestructura a Azure hasta el final del trimestre",
   "taskchain_home_main_placeholder_7": "Planifique y haga un viaje por carretera de 15 días por Brasil",
-  "hello_name": "Hola <b> {name}</b>!"
+  "hello_name": "Hola {name}!"
 }
