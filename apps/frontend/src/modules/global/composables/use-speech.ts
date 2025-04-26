@@ -41,7 +41,7 @@ export function useSpeech({
     if (isSpeaking.value) {
       globalStore.aiVoiceState = AiVoiceState.SPEAKING
     } else {
-      globalStore.aiVoiceState = AiVoiceState.THINKING
+      globalStore.aiVoiceState = AiVoiceState.IDLE
     }
   })
 

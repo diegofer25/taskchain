@@ -6,7 +6,7 @@ import { computed, ref } from 'vue'
 export const useGlobalStore = defineStore('global', () => {
   const isPreferredDark = useMediaQuery('(prefers-color-scheme: dark)')
   const userDefaultTheme = isPreferredDark.value ? 'dark' : 'light'
-  const aiVoiceState = ref(AiVoiceState.THINKING)
+  const aiVoiceState = ref(AiVoiceState.IDLE)
 
   const savedTheme = useStorage<'light' | 'dark'>('theme', userDefaultTheme)
 

@@ -35,6 +35,7 @@ export function useRive<I extends ReadonlyArray<StrictInput>>(options: UseRiveOp
     canvasRef,
     src,
     autoplay = true,
+    autoBind = false,
     stateMachineName = 'State Machine 1',
     inputs = [],
     onStateChange,
@@ -82,6 +83,7 @@ export function useRive<I extends ReadonlyArray<StrictInput>>(options: UseRiveOp
       canvas: canvasRef.value,
       stateMachines: stateMachineName,
       autoplay,
+      autoBind,
       onLoad,
       onStateChange,
     })
@@ -161,6 +163,7 @@ interface UseRiveOption<I extends ReadonlyArray<StrictInput>> {
   canvasRef: Ref<HTMLCanvasElement | null>
   src: string
   autoplay?: boolean
+  autoBind?: boolean
   stateMachineName?: string
   inputs?: I
   onLoad?: (rive: Rive) => void
