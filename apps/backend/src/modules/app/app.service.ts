@@ -6,7 +6,8 @@ export class AppService {
 
   getHello() {
     return {
-      message: 'Hello from NestJS!',
+      message: 'TaskChain API is running',
+      version: '0.1.0',
     };
   }
 }
