@@ -12,17 +12,14 @@ on:
 jobs:
   ci_job:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [22.x]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Use Node ${{ matrix.node-version }}
+      - name: Use Node 22
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22.x
           cache: 'npm'
 
       - run: npm ci
@@ -30,6 +27,7 @@ jobs:
       - run: npm --prefix ./apps/frontend run lint
       
   build_and_deploy_job:
+    needs: ci_job
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     env:
       VITE_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
@@ -37,7 +35,7 @@ jobs:
       VITE_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
       VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
       VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
-      VITE_FIREBASE_APP_ID=1: ${{ secrets.FIREBASE_APP_ID }}
+      VITE_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
       VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
     runs-on: ubuntu-latest
     name: Build and Deploy Job
