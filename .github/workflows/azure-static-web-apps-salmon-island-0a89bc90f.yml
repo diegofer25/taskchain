@@ -26,7 +26,7 @@ jobs:
       - run: npm --prefix ./apps/frontend run type-check
       - run: npm --prefix ./apps/frontend run lint
       
-  cd:
+  build_and_deploy:
     needs: ci
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     env:
