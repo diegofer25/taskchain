@@ -18,11 +18,11 @@ Generate a **brief and clear description of the context**, followed by a set of 
 
 export class DiscoveryAgent {
   private llm = new AzureChatOpenAI({
-    azureOpenAIApiKey: process.env.AZURE_OPENAI_KEY_O1,
-    azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_RESOURCE_O1,
-    azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_DEPLOYMENT_O1,
+    azureOpenAIApiKey: process.env.AZURE_OPENAI_KEY,
+    azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_RESOURCE,
+    azureOpenAIApiDeploymentName:
+      process.env.AZURE_OPENAI_DEPLOYMENT_REASONING_MODEL,
     temperature: 0.5,
-    streaming: true,
   });
 
   async run(input: { message: string; language: string }): Promise<string> {

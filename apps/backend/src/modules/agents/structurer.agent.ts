@@ -26,9 +26,10 @@ the provided JSON Schema exactly.
 
 export class StructurerAgent {
   private llm = new AzureChatOpenAI({
-    azureOpenAIApiKey: process.env.AZURE_OPENAI_KEY_GPT4O,
-    azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_RESOURCE_GPT4O,
-    azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_DEPLOYMENT_GPT4O,
+    azureOpenAIApiKey: process.env.AZURE_OPENAI_KEY,
+    azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_RESOURCE,
+    azureOpenAIApiDeploymentName:
+      process.env.AZURE_OPENAI_DEPLOYMENT_TOOL_MODEL,
     temperature: 0.2,
   });
 
