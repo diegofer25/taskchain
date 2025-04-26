@@ -3,6 +3,7 @@
     class="rounded-lg transition-colors duration-500 bg-light-translucent dark:bg-dark-translucent mx-2 mt-4"
   >
     <textarea
+      @keydown.enter.prevent="onEnterPress"
       rows="5"
       name="description"
       id="description"
@@ -26,6 +27,7 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
+  (e: 'key-enter'): void
 }>()
 const { t } = useI18n()
 const typeWriter = useTypeWriter({
@@ -43,4 +45,12 @@ const value = computed({
   get: () => props.modelValue,
   set: (val) => emit('update:modelValue', val),
 })
+
+const onEnterPress = (event: KeyboardEvent) => {
+  if (event.shiftKey) {
+    return
+  }
+  event.preventDefault()
+  emit('key-enter')
+}
 </script>
