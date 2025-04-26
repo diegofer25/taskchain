@@ -4,12 +4,12 @@ import { type App, createApp, type Plugin } from 'vue'
 
 export const GlobalLoadingPlugin: Plugin = {
   install(app: App) {
-    // ➊ Mount the overlay once, outside your component tree
+    // Mount the overlay once, outside your component tree
     const el = document.createElement('div')
     document.body.appendChild(el)
     createApp(AppLoading).mount(el)
 
-    // ➋ Expose helpers in two convenient ways
+    // Expose helpers in two convenient ways
     const controls = useGlobalLoading()
     app.provide('loading', controls) // --> inject('loading')
     app.config.globalProperties.$loading = controls // --> this.$loading in options API

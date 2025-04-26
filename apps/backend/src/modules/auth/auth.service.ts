@@ -7,6 +7,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { SpeechToken } from '@taskchain/types';
 import { PUBSUB_CLIENT } from 'src/modules/pubsub/pubsub.module';
 
 @Injectable()
@@ -42,7 +43,7 @@ export class AuthService {
       .then(({ url, token }) => ({ url, token }));
   }
 
-  async getAzureTtsToken() {
+  async getAzureTtsToken(): Promise<SpeechToken> {
     const region = this.configService.get<string>('AZURE_SPEECH_REGION');
     if (!region) {
       throw new InternalServerErrorException('AZURE_SPEECH_REGION is not set');

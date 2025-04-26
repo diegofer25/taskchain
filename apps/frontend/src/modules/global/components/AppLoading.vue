@@ -1,9 +1,8 @@
 <template>
-  <!-- Fades in/out only when loading is true -->
   <transition name="fade">
     <div
       v-if="isLoading"
-      class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      class="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm"
     >
       <!-- Spinner -->
       <div

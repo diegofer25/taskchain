@@ -1,6 +1,7 @@
 import { useWaitTime } from '@/modules/global/composables/use-wait-time'
 import { useGlobalStore } from '@/modules/global/stores/global.store'
 import { AiVoiceState } from '@/modules/global/types/ai-voice.types'
+import type { SpeechToken } from '@taskchain/types'
 import { useStorage } from '@vueuse/core'
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
 import { SynthesisAdapterBase } from 'microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common.speech/SynthesisAdapterBase'
@@ -15,11 +16,6 @@ interface UseTTSOptions {
   onViseme?: (visemeId: number, audioOffset: number) => void
   /** Callback for speech synthesis events */
   onCancel?: (sender: sdk.SpeechSynthesizer, event: sdk.SpeechSynthesisEventArgs) => void
-}
-
-export interface SpeechToken {
-  token: string
-  region: string
 }
 
 export function useSpeech({

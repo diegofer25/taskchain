@@ -27,18 +27,18 @@ import { useAuthStore } from '@/modules/auth/stores/auth.store'
 import AppHeaderOption from '@/modules/global/components/app-header/AppHeaderOption.vue'
 import AppLanguageSelector from '@/modules/global/components/AppLanguageSelector.vue'
 import AppThemeToggle from '@/modules/global/components/AppThemeToggle.vue'
-import { useInteractionsStore } from '@/modules/global/stores/interactions.store'
+import { useConfirmation } from '@/modules/global/composables/use-confirmation'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/16/solid'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
 const router = useRouter()
+const { confirm } = useConfirmation()
 const authStore = useAuthStore()
-const interactionsStore = useInteractionsStore()
 
 async function signOut() {
-  const confirmed = await interactionsStore.confirm({
+  const confirmed = await confirm({
     title: t('sign_out'),
     description: t('are_you_sure_you_want_to_sign_out'),
     confirmText: t('yes'),

@@ -1,5 +1,5 @@
 import { Controller, Get, ParseBoolPipe, Query } from '@nestjs/common';
-import { AuthPubSubResponse } from '@taskchain/types';
+import { AuthPubSubResponse, SpeechToken } from '@taskchain/types';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { FirebaseUser } from 'src/modules/firebase/firebase.decorator';
@@ -17,7 +17,7 @@ export class AuthController {
   }
 
   @Get('speech')
-  getAzureTtsToken(): Promise<{ token: string; region: string }> {
+  getAzureTtsToken(): Promise<SpeechToken> {
     return this.service.getAzureTtsToken();
   }
 }

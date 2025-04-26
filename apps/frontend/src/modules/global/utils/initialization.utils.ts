@@ -33,7 +33,6 @@ export async function requestTokensDependentsOnFbToken() {
   }
 
   const fbToken = await user.getIdToken()
-
   const [pubSubToken, speechToken] = await Promise.all([
     fetchPubSubAuthToken(fbToken),
     fetchSpeechToken(fbToken),

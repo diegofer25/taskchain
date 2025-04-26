@@ -1,11 +1,15 @@
+import { i18n } from '@/i18n'
+import { useAuthStore } from '@/modules/auth/stores/auth.store'
+import { useConfirmation } from '@/modules/global/composables/use-confirmation'
 import { useInteractionsStore } from '@/modules/global/stores/interactions.store'
+import router from '@/router'
 import type { AuthPubSubResponse } from '@taskchain/types'
 import { useFetch } from '@vueuse/core'
-import { useI18n } from 'vue-i18n'
 
 export async function fetchPubSubAuthToken(fbToken: string, isForce = false) {
-  const { t } = useI18n()
-  const { showNotification, confirm } = useInteractionsStore()
+  const authStore = useAuthStore()
+  const confirmation = useConfirmation()
+  const { showNotification } = useInteractionsStore()
   const { data, statusCode } = await useFetch(`/api/auth/pubsub?force=${isForce}`, {
     async beforeFetch({ options }) {
       options.headers = {
@@ -22,18 +26,21 @@ export async function fetchPubSubAuthToken(fbToken: string, isForce = false) {
     .json<AuthPubSubResponse>()
 
   if (statusCode.value === 409) {
-    const accepted = await confirm({
-      title: t('you_already_connected_in_another_device'),
-      description: t('want_to_disconnect'),
+    const accepted = await confirmation.confirm({
+      title: i18n.global.t('you_already_connected_in_another_device'),
+      description: i18n.global.t('want_to_disconnect'),
     })
 
     if (accepted) {
       return fetchPubSubAuthToken(fbToken, true)
+    } else {
+      await authStore.signOut()
+      router.push({ name: 'Auth' })
     }
 
     showNotification({
-      message: t('you_cannot_connect_until_you_disconnect_the_other_device'),
-      title: t('error'),
+      message: i18n.global.t('you_cannot_connect_until_you_disconnect_the_other_device'),
+      title: i18n.global.t('error'),
       status: 'error',
     })
   }

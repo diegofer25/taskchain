@@ -1,6 +1,11 @@
 <template>
-  <TransitionRoot as="template" :show="open">
-    <Dialog class="relative z-10" @close="open = false">
+  <TransitionRoot
+    as="template"
+    :show="!confirmation.closed"
+    v-for="confirmation in confirmations"
+    :key="confirmation.id"
+  >
+    <Dialog class="relative z-50">
       <TransitionChild
         as="template"
         enter="ease-out duration-300"
@@ -35,9 +40,9 @@
                     class="mx-auto flex size-8 md:size-10 shrink-0 items-center justify-center rounded-ful sm:mx-0 sm:size-10"
                   >
                     <component
-                      :is="_iconComponent"
+                      :is="confirmation.iconComponent || InformationCircleIcon"
                       class="size-8 md:size-10 rounded-full bg-light-translucent dark:bg-dark-translucent text-light-text dark:text-dark-text"
-                      :class="_iconClass"
+                      :class="confirmation.iconClass || 'text-light-accent dark:text-dark-accent'"
                       aria-hidden="true"
                     />
                   </div>
@@ -45,11 +50,11 @@
                     <DialogTitle
                       as="h3"
                       class="text-base font-semibold text-light-text dark:text-dark-text"
-                      >{{ _title }}</DialogTitle
+                      >{{ confirmation.title || t('confirmation') }}</DialogTitle
                     >
                     <div class="mt-2">
                       <p class="text-sm text-light-text-2 dark:text-dark-text-2">
-                        {{ _description }}
+                        {{ confirmation.description || t('are_you_sure_about_this_action') }}
                       </p>
                     </div>
                   </div>
@@ -61,17 +66,17 @@
                 <button
                   type="button"
                   class="cursor-pointer inline-flex w-full justify-center rounded-md bg-light-link dark:bg-dark-link hover:bg-light-link-hover dark:hover:bg-dark-link-hover px-3 py-2 text-sm font-semibold text-dark-text dark:text-light-text shadow-xs sm:ml-3 sm:w-auto"
-                  @click="confirm"
+                  @click="confirmation.onConfirm()"
                 >
-                  {{ _confirmText }}
+                  {{ confirmation.confirmText || t('ok') }}
                 </button>
                 <button
                   type="button"
                   class="cursor-pointer mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                  @click="cancel"
+                  @click="confirmation.onCancel()"
                   ref="cancelButtonRef"
                 >
-                  {{ _cancelText }}
+                  {{ confirmation.cancelText || t('cancel') }}
                 </button>
               </div>
             </DialogPanel>
@@ -83,9 +88,10 @@
 </template>
 
 <script setup lang="ts">
+import { useConfirmation } from '@/modules/global/composables/use-confirmation'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { InformationCircleIcon } from '@heroicons/vue/16/solid'
-import { computed, ref, type FunctionalComponent } from 'vue'
+import { type FunctionalComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export interface Props {
@@ -97,27 +103,6 @@ export interface Props {
   cancelText?: string
 }
 
-const props = defineProps<Props>()
-
-const emit = defineEmits<{
-  (e: 'confirm'): void
-  (e: 'cancel'): void
-}>()
 const { t } = useI18n()
-const open = ref(true)
-const _title = computed(() => props.title || t('confirmation'))
-const _description = computed(() => props.description || t('are_you_sure_about_this_action'))
-const _iconComponent = computed(() => props.iconComponent || InformationCircleIcon)
-const _iconClass = computed(() => props.iconClass || 'text-light-accent dark:text-dark-accent')
-const _confirmText = computed(() => props.confirmText || t('ok'))
-const _cancelText = computed(() => props.cancelText || t('cancel'))
-
-function confirm() {
-  open.value = false
-  emit('confirm')
-}
-function cancel() {
-  open.value = false
-  emit('cancel')
-}
+const { confirmations } = useConfirmation()
 </script>

@@ -24,3 +24,8 @@ export interface AuthPubSubResponse {
     url: string;
     token: string;
 }
+
+export interface SpeechToken {
+  token: string
+  region: string
+}

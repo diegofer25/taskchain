@@ -1,13 +1,10 @@
-import type { Props as AppConfirmDialogProps } from '@/modules/global/components/app-interactions/AppConfirmDialog.vue'
-import { useTimeoutFn } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 
 export const useInteractionsStore = defineStore('interactions', () => {
   const notifications = reactive<Notification[]>([])
-  const confirmations = reactive<ConfirmOptions[]>([])
 
-  return { notifications, confirmations, showNotification, removeNotification, confirm }
+  return { notifications, showNotification, removeNotification, confirm }
 
   function showNotification({
     status = 'success',
@@ -31,32 +28,6 @@ export const useInteractionsStore = defineStore('interactions', () => {
       notifications.splice(index, 1)
     }
   }
-
-  async function confirm(options: AppConfirmDialogProps) {
-    const id = crypto.randomUUID()
-    const isConfirmed = await new Promise((resolve) => {
-      confirmations.push({
-        ...options,
-        id,
-        onConfirm: () => resolve(true),
-        onCancel: () => resolve(false),
-      })
-    })
-
-    removeAfterCloseAnimation(id)
-
-    return isConfirmed
-
-    function removeAfterCloseAnimation(id: string) {
-      const index = confirmations.findIndex((c) => c.id === id)
-
-      if (index !== -1) {
-        useTimeoutFn(() => {
-          confirmations.splice(index, 1)
-        }, 300)
-      }
-    }
-  }
 })
 
 // region Types
@@ -75,9 +46,4 @@ interface NotifyOptions {
   duration?: number
 }
 
-interface ConfirmOptions extends AppConfirmDialogProps {
-  id: string
-  onConfirm: () => void
-  onCancel: () => void
-}
 // endregion

@@ -1,4 +1,4 @@
-import type { SpeechToken } from '@/modules/global/composables/use-speech'
+import type { SpeechToken } from '@taskchain/types'
 import { useFetch } from '@vueuse/core'
 
 export async function fetchSpeechToken(fbToken: string) {

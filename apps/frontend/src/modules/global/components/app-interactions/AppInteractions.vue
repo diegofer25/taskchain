@@ -14,19 +14,18 @@
       />
     </div>
   </div>
-  <AppConfirmDialog
+  <!-- <AppConfirmDialog
     v-for="{ id, onCancel, onConfirm, ...props } in confirmations"
     :key="id"
     v-bind="props"
     @cancel="onCancel"
     @confirm="onConfirm"
-  />
+  /> -->
 </template>
 
 <script setup lang="ts">
-import AppConfirmDialog from '@/modules/global/components/app-interactions/AppConfirmDialog.vue'
 import AppNotification from '@/modules/global/components/app-interactions/AppNotification.vue'
 import { useInteractionsStore } from '@/modules/global/stores/interactions.store'
 
-const { notifications, confirmations, removeNotification } = useInteractionsStore()
+const { notifications, removeNotification } = useInteractionsStore()
 </script>

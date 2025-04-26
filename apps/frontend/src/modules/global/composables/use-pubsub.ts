@@ -1,3 +1,4 @@
+import { i18n } from '@/i18n'
 import { useAuthStore } from '@/modules/auth/stores/auth.store'
 import { useInteractionsStore } from '@/modules/global/stores/interactions.store'
 import {
@@ -9,7 +10,6 @@ import {
 import type { AuthPubSubResponse } from '@taskchain/types'
 import { useStorage } from '@vueuse/core'
 import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 /** Generic pub-sub payload */
@@ -22,7 +22,6 @@ const MAX_RETRIES = 5
 
 export function usePubSub() {
   const router = useRouter()
-  const { t } = useI18n()
   const { showNotification } = useInteractionsStore()
   const authStore = useAuthStore()
   const isConnected = ref(false)
@@ -77,8 +76,8 @@ export function usePubSub() {
         setTimeout(connect, 5_000)
       } else {
         showNotification({
-          message: t('an_error_occurred_while_connecting_to_the_update_server'),
-          title: t('error'),
+          message: i18n.global.t('an_error_occurred_while_connecting_to_the_update_server'),
+          title: i18n.global.t('error'),
           status: 'error',
         })
       }
@@ -97,16 +96,16 @@ export function usePubSub() {
     if (cb) dispatchHandlers([cb], message.data)
   }
 
-  function onDisconnected(e: OnDisconnectedArgs) {
-    const forced = e.message?.message === 'Application server closed the connection. Reason: force' // Azure sends this reason :contentReference[oaicite:3]{index=3}
+  async function onDisconnected(e: OnDisconnectedArgs) {
+    const forced = e.message?.message === 'Application server closed the connection. Reason: force'
     if (forced) {
+      await authStore.signOut()
+      router.push({ name: 'Auth' })
       showNotification({
-        message: t('you_was_disconnected_by_another_device'),
-        title: t('disconnected'),
+        message: i18n.global.t('you_was_disconnected_by_another_device'),
+        title: i18n.global.t('disconnected'),
         status: 'warning',
       })
-      authStore.signOut()
-      router.push({ name: 'Auth' })
     }
     isConnected.value = false
   }
