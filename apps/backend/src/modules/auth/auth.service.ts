@@ -1,6 +1,7 @@
 import { WebPubSubServiceClient } from '@azure/web-pubsub';
 import { HttpService } from '@nestjs/axios';
 import {
+  ConflictException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -16,15 +17,29 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  /** Generate SAS for Web PubSub */
-  async getPubSubSas(uid: string) {
-    const { url, token } = await this.pubSub.getClientAccessToken({
-      userId: uid,
-      roles: ['webpubsub.joinLeaveGroup'],
-      expirationTimeInMinutes: 1440, // 24h
-    });
+  async getAuthPubsub(isForce: boolean, userId: string) {
+    if (await this.pubSub.userExists(userId)) {
+      if (isForce) {
+        await Promise.all([
+          this.pubSub.closeUserConnections(userId, { reason: 'force' }),
+          this.pubSub.removeUserFromAllGroups(userId),
+        ]);
+      } else {
+        throw new ConflictException('already_connected');
+      }
+    }
 
-    return { url, token };
+    return this.generateClientSignedUrl(userId);
+  }
+
+  private async generateClientSignedUrl(userId: string) {
+    return this.pubSub
+      .getClientAccessToken({
+        expirationTimeInMinutes: 60 * 24,
+        userId,
+        roles: ['webpubsub.joinLeaveGroup'],
+      })
+      .then(({ url, token }) => ({ url, token }));
   }
 
   async getAzureTtsToken() {

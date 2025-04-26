@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, ParseBoolPipe, Query } from '@nestjs/common';
 import { AuthPubSubResponse } from '@taskchain/types';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { AuthService } from 'src/modules/auth/auth.service';
@@ -11,8 +11,9 @@ export class AuthController {
   @Get('pubsub')
   async authPubSub(
     @FirebaseUser() user: DecodedIdToken,
+    @Query('force', ParseBoolPipe) force: boolean,
   ): Promise<AuthPubSubResponse> {
-    return this.service.getPubSubSas(user.uid);
+    return this.service.getAuthPubsub(force, user.uid);
   }
 
   @Get('speech')
