@@ -1,0 +1,20 @@
+{
+  "navigationFallback": {
+    "rewrite": "index.html",
+    "exclude": [
+      "/assets/*.{png,jpg,gif,ico,css,scss,js}",
+      "/api/*",
+      "/rive.wasm",
+      "/icon-dark.svg",
+      "/icon.svg"
+    ]
+  },
+  "routes": [
+    {
+      "route": "/sw.js",
+      "headers": {
+        "cache-control": "no-cache"
+      }
+    }
+  ]
+}
