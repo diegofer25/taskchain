@@ -6,10 +6,6 @@ on:
     paths-ignore:
       - 'apps/backend/**'
       - '.github/workflows/main_taskchain.yml'
-    paths:
-      - 'apps/frontend/**'
-      - 'packages/types/**'
-      - '.github/workflows/azure-static-web-apps-salmon-island-0a89bc90f.yml'
 
   pull_request:
     paths:
