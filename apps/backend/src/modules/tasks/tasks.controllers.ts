@@ -1,5 +1,8 @@
 import { Body, Controller, HttpCode, Post, UsePipes } from '@nestjs/common';
+import { GenerateQuestionsResponse } from '@taskchain/types';
+import { UserInfo } from 'firebase-admin/auth';
 import { ZodValidationPipe } from 'nestjs-zod';
+import { FirebaseUser } from 'src/modules/firebase/firebase.decorator';
 import { CreateTaskDto } from 'src/modules/tasks/tasks.dto';
 import { TasksService } from 'src/modules/tasks/tasks.service';
 
@@ -10,7 +13,10 @@ export class TasksController {
   @Post()
   @HttpCode(200)
   @UsePipes(ZodValidationPipe)
-  async create(@Body() body: CreateTaskDto) {
-    return this.service.generateQuestions(body.message, body.language);
+  create(
+    @Body() body: CreateTaskDto,
+    @FirebaseUser() user: UserInfo,
+  ): GenerateQuestionsResponse {
+    return this.service.generateQuestions(user.uid, body);
   }
 }

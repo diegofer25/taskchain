@@ -21,7 +21,8 @@ export class DiscoveryAgent {
     azureOpenAIApiKey: process.env.AZURE_OPENAI_KEY_O1,
     azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_RESOURCE_O1,
     azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_DEPLOYMENT_O1,
-    temperature: 0.2,
+    temperature: 0.5,
+    streaming: true,
   });
 
   async run(input: { message: string; language: string }): Promise<string> {
