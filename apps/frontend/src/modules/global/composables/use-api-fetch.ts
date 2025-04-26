@@ -2,7 +2,7 @@ import { useAuthStore } from '@/modules/auth/stores/auth.store'
 import { createFetch } from '@vueuse/core'
 
 export const useApiFetch = createFetch({
-  baseUrl: '/api',
+  baseUrl: '/api/v1',
   options: {
     async beforeFetch({ options }) {
       const authStore = useAuthStore()

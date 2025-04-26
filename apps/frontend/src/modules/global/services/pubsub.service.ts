@@ -10,7 +10,7 @@ export async function fetchPubSubAuthToken(fbToken: string, isForce = false) {
   const authStore = useAuthStore()
   const confirmation = useConfirmation()
   const { showNotification } = useInteractionsStore()
-  const { data, statusCode } = await useFetch(`/api/auth/pubsub?force=${isForce}`, {
+  const { data, statusCode } = await useFetch(`/api/v1/auth/pubsub?force=${isForce}`, {
     async beforeFetch({ options }) {
       options.headers = {
         ...options.headers,

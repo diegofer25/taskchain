@@ -2,7 +2,7 @@ import type { SpeechToken } from '@taskchain/types'
 import { useFetch } from '@vueuse/core'
 
 export async function fetchSpeechToken(fbToken: string) {
-  const { data } = await useFetch('/api/auth/speech', {
+  const { data } = await useFetch('/api/v1/auth/speech', {
     async beforeFetch({ options }) {
       options.headers = {
         ...options.headers,

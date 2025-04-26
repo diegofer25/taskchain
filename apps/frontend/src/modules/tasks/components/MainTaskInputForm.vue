@@ -32,7 +32,7 @@ import { useI18n } from 'vue-i18n'
 const { t, locale } = useI18n()
 const authStore = useAuthStore()
 const { speak } = useSpeech()
-const { isFetching, post } = useApiFetch('/api/tasks')
+const { isFetching, post } = useApiFetch('/api/v1/tasks', { immediate: false })
 const goalInput = ref<string>('')
 const buttonAnimationCanvasRef = ref<HTMLCanvasElement | null>(null)
 const startMessage = `${t('hello_name', { name: authStore.firstName })} ${t('taskchain_home_main_title')}`
