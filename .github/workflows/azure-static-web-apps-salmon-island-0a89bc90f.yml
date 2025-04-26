@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths-ignore:
       - 'apps/backend/**'
+      - 'apps/functions/**'
       - '.github/workflows/main_taskchain.yml'
 
   pull_request:
