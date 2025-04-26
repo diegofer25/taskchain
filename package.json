@@ -5,15 +5,8 @@
     "private": true,
     "version": "0.0.0",
     "scripts": {
-        "install:backend": "npm --prefix ./apps/backend install",
-        "install:frontend": "npm --prefix ./apps/frontend install",
-        "install:eslint-config": "npm --prefix ./packages/eslint-config install",
-        "install:types": "npm --prefix ./packages/types install",
-        "install:apps": "npm run install:backend && npm run install:frontend",
-        "install:packages": "npm run install:eslint-config && npm run install:types",
-        "install:all": "npm install && npm run install:apps && npm run install:packages",
         "check": "turbo run lint check-types",
-        "build": "npm run install:all && turbo run build",
+        "build": "turbo run build",
         "start": "node apps/backend/dist/main.js",
         "dev": "turbo run dev"
     },
