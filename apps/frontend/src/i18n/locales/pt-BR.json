@@ -32,5 +32,12 @@
   "google-1": "Google",
   "microsoft": "Microsoft",
   "google-0": "Google",
-  "google": "Google"
+  "google": "Google",
+  "an_error_occurred_while_connecting_to_the_update_server": "Ocorreu um erro enquanto conectava ao servidor",
+  "error": "Erro",
+  "you_already_connected_in_another_device": "Você já está conectado em outro dispositivo",
+  "want_to_disconnect": "Deseja desconectar?",
+  "you_cannot_connect_until_you_disconnect_the_other_device": "Você não pode se conectar enquanto não desconectar da outra seção",
+  "you_was_disconnected_by_another_device": "Você foi desconectado por outra seção",
+  "disconnected": "Desconectado"
 }

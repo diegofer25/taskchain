@@ -1,5 +1,5 @@
 <template>
-  <template v-if="loaded">
+  <template v-if="loaded && pubsub.isConnected.value">
     <AppHeader />
     <RouterView />
   </template>
@@ -10,10 +10,12 @@
 import AppHeader from '@/modules/global/components/app-header/AppHeader.vue'
 import AppInteractions from '@/modules/global/components/app-interactions/AppInteractions.vue'
 import { useGlobalLoading } from '@/modules/global/composables/use-global-loading'
+import { usePubSub } from '@/modules/global/composables/use-pubsub'
 import { loadAppDependencies } from '@/modules/global/utils/initialization.utils'
 import { onMounted, ref } from 'vue'
 import { RouterView } from 'vue-router'
 
+const pubsub = usePubSub()
 const { show, hide } = useGlobalLoading()
 const loaded = ref(false)
 
@@ -25,6 +27,7 @@ onMounted(async () => {
       // and it is faster to load. But for development I prefer to use the local version of the Rive WASM
       riveUrl: import.meta.env.DEV ? '/rive.wasm' : undefined,
     })
+    await pubsub.connect()
     loaded.value = true
   } catch (error) {
     console.error('Error loading app dependencies:', error)

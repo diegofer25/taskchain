@@ -23,5 +23,12 @@
   "taskchain_home_main_placeholder_6": "Migrate my infrastructure to Azure until the end of the quarter",
   "taskchain_home_main_placeholder_7": "Plan and make a 15 -day Road Trip throughout Brazil",
   "taskchain_home_main_placeholder_2": "Fold my freelance revenue until December",
-  "hello_name": "Hello {name}!"
+  "hello_name": "Hello {name}!",
+  "an_error_occurred_while_connecting_to_the_update_server": "An error occurred while connecting to the server",
+  "error": "Error",
+  "want_to_disconnect": "Want to disconnect?",
+  "you_already_connected_in_another_device": "You are already connected to another device",
+  "you_cannot_connect_until_you_disconnect_the_other_device": "You cannot connect until you disconnect from the other section",
+  "you_was_disconnected_by_another_device": "You were disconnected by another section",
+  "disconnected": "Disconnected"
 }

@@ -19,7 +19,9 @@ export async function loadAppDependencies({ riveUrl }: LoadAppDependenciesOption
       new FontFaceObserver('Inter').load(),
     ])
   } catch {
-    loadAppDependencies({ riveUrl: '/rive.wasm' })
+    if (riveUrl !== '/rive.wasm') {
+      return loadAppDependencies({ riveUrl: '/rive.wasm' })
+    }
   }
 }
 
