@@ -11,7 +11,6 @@ router.beforeEach((to, from, next) => {
   const isGuestOpen = to.matched.some((record) => record.meta.isGuestOpen)
   const authStore = useAuthStore()
   if (!isGuestOpen && !authStore.isAuthenticated) {
-    console.log('User not authenticated, redirecting to Auth page', authStore.isAuthenticated)
     next({ name: 'Auth' })
   } else if (to.name === 'Auth' && authStore.isAuthenticated) {
     next({ name: 'TasksHome' })

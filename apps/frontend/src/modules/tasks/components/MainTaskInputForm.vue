@@ -1,12 +1,6 @@
 <template>
   <form @submit.prevent class="flex flex-col min-w-80 w-full">
     <div class="flex flex-col text-center">
-      <!-- <h1 class="text-lg sm:text-xl md:text-2xl text-light-text dark:text-dark-text mb-4">
-        <span v-text="t('hello_name', { name: authStore.firstName })"></span>
-        <br />
-        {{ t('taskchain_home_main_title') }}
-      </h1> -->
-
       <AppAiVoiceAnimation class="h-auto w-1/2 max-w-96 self-center" />
     </div>
 

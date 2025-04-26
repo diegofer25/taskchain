@@ -1,4 +1,4 @@
-import { useAuthStore } from '@/modules/auth/stores/auth.store'
+import { waitForAuthCheck } from '@/modules/global/services/firebase.service'
 import { fetchPubSubAuthToken } from '@/modules/global/services/pubsub.service'
 import { fetchSpeechToken } from '@/modules/global/services/speech.service'
 import { RuntimeLoader } from '@rive-app/webgl'
@@ -24,7 +24,7 @@ export async function loadAppDependencies({ riveUrl }: LoadAppDependenciesOption
 }
 
 export async function requestTokensDependentsOnFbToken() {
-  const { user } = useAuthStore()
+  const user = await waitForAuthCheck()
 
   if (!user) {
     return
