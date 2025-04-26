@@ -22,7 +22,7 @@
 <script lang="ts" setup>
 import { useAuthStore } from '@/modules/auth/stores/auth.store'
 import AppAiVoiceAnimation from '@/modules/global/components/AppAiVoiceAnimation.vue'
-import { useAppFetch } from '@/modules/global/composables/use-app-fetch'
+import { useApiFetch } from '@/modules/global/composables/use-api-fetch'
 import { useRive } from '@/modules/global/composables/use-rive'
 import { useSpeech } from '@/modules/global/composables/use-speech'
 import PromptInput from '@/modules/tasks/components/PromptInput.vue'
@@ -32,7 +32,7 @@ import { useI18n } from 'vue-i18n'
 const { t, locale } = useI18n()
 const authStore = useAuthStore()
 const { speak } = useSpeech()
-const { isFetching, post } = useAppFetch('/api/tasks')
+const { isFetching, post } = useApiFetch('/api/tasks')
 const goalInput = ref<string>('')
 const buttonAnimationCanvasRef = ref<HTMLCanvasElement | null>(null)
 const startMessage = `${t('hello_name', { name: authStore.firstName })} ${t('taskchain_home_main_title')}`
@@ -63,5 +63,7 @@ const { getInstance } = useRive({
 async function processUserGoal() {
   console.log('Processing user goal:', goalInput.value)
   const response = await post().json()
+
+  console.log('Response:', response)
 }
 </script>
