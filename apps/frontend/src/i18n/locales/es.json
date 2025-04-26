@@ -23,7 +23,7 @@
   "taskchain_home_main_placeholder_5": "Lea toda la Biblia en 6 meses",
   "taskchain_home_main_placeholder_6": "Migra mi infraestructura a Azure hasta el final del trimestre",
   "taskchain_home_main_placeholder_7": "Planifique y haga un viaje por carretera de 15 días por Brasil",
-  "hello_name": "Hola {name}!",
+  "hello_name": "Hola {nombre}, ¿cómo estás?",
   "an_error_occurred_while_connecting_to_the_update_server": "Se produjo un error al conectarse al servidor",
   "error": "Error",
   "want_to_disconnect": "¿Quieres desconectar?",
