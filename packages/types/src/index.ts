@@ -29,3 +29,7 @@ export interface SpeechToken {
   token: string
   region: string
 }
+
+export interface GenerateQuestionsResponse {
+    processing: true;
+}
