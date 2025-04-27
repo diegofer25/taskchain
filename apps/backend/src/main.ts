@@ -1,22 +1,19 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from 'src/modules/app/app.module';
 import { FirebaseAuthGuard } from 'src/modules/auth/auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalGuards(new FirebaseAuthGuard());
-
+  const reflector = app.get(Reflector);
+  app.useGlobalGuards(new FirebaseAuthGuard(reflector));
   app.setGlobalPrefix('api/v1');
 
-  await app.listen(process.env.PORT ?? 3000);
+  const port = +(process.env.PORT ?? 3000);
+  await app.listen(port, '0.0.0.0');
+  console.log(`🚀  Listening on ${port}`);
 }
-bootstrap()
-  .then(() => {
-    console.log(`🚀 Application is running on: ${process.env.PORT ?? 3000}`);
-    console.log(`🌍 Environment: ${process.env.NODE_ENV ?? 'development'}`);
-  })
-  .catch((err) => {
-    console.error('Error starting the application:', err);
-    process.exit(1);
-  });
+bootstrap().catch((err) => {
+  console.error('Error starting the application:', err);
+  process.exit(1);
+});

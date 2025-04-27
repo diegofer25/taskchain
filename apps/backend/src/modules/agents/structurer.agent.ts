@@ -1,4 +1,3 @@
-import { StructuredOutputParser } from '@langchain/core/output_parsers';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { AzureChatOpenAI } from '@langchain/openai';
 import {
@@ -21,7 +20,7 @@ the provided JSON Schema exactly.
 2. For each question line:
    a. Strip "- " and assign to "text".
    b. Generate incremental ids "q1", "q2", … preserving order.
-3. Output ONLY the JSON object, no markdown, no comments.
+3. Output ONLY the valid JSON object, no markdown, no comments.
 `;
 
 export class StructurerAgent {
@@ -30,10 +29,9 @@ export class StructurerAgent {
     azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_RESOURCE,
     azureOpenAIApiDeploymentName:
       process.env.AZURE_OPENAI_DEPLOYMENT_TOOL_MODEL,
-    temperature: 0.2,
+    azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION,
+    temperature: 0.5,
   });
-
-  private parser = new StructuredOutputParser(TaskQuestionsSchema);
 
   async run(plain: string): Promise<TaskQuestions> {
     const prompt = ChatPromptTemplate.fromMessages([
@@ -41,7 +39,9 @@ export class StructurerAgent {
       ['user', plain],
     ]);
 
-    const chain = prompt.pipe(this.llm).pipe(this.parser);
+    const chain = prompt.pipe(
+      this.llm.withStructuredOutput(TaskQuestionsSchema),
+    );
 
     return await chain.invoke({});
   }

@@ -4,12 +4,25 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { getAuth } from 'firebase-admin/auth';
+import { SKIP_AUTH } from 'src/modules/auth/auth.decorators';
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
+
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(SKIP_AUTH, [
+      ctx.getHandler(),
+      ctx.getClass(),
+    ]);
+
+    if (isPublic) {
+      return true;
+    }
+
     const req = ctx.switchToHttp().getRequest<Request>();
     const header = req.headers.authorization ?? '';
 

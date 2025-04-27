@@ -19,9 +19,60 @@ export class TasksService {
     uid: string,
     { language, message }: CreateTaskDto,
   ): GenerateQuestionsResponse {
+    this.processGenerateQuestions(uid, message, language);
+    return {
+      processing: true,
+    };
+  }
+
+  private processGenerateQuestions(
+    uid: string,
+    message: string,
+    language: string,
+  ) {
+    this.pubSub
+      .sendToUser(uid, {
+        event: 'task_processing',
+        data: {
+          message: 'Processing your request...',
+        },
+      })
+      .catch((error) => {
+        console.error('Failed to send processing message to user:', error);
+      });
     this.discovery
       .run({ message, language })
-      .then((raw) => this.structurer.run(raw))
+      .then((raw) => {
+        this.pubSub
+          .sendToUser(uid, {
+            event: 'task_discovery',
+            data: {
+              questions: raw,
+            },
+          })
+          .catch((sendError) => {
+            console.error(
+              'Failed to send discovery message to user:',
+              sendError,
+            );
+          });
+
+        return this.structurer.run(raw).then((structured) => {
+          this.pubSub
+            .sendToUser(uid, {
+              event: 'task_structured',
+              data: {
+                questions: structured,
+              },
+            })
+            .catch((sendError) => {
+              console.error(
+                'Failed to send structurer message to user:',
+                sendError,
+              );
+            });
+        });
+      })
       .catch((error) => {
         this.pubSub
           .sendToUser(uid, {
@@ -34,9 +85,5 @@ export class TasksService {
             console.error('Failed to send error message to user:', sendError);
           });
       });
-
-    return {
-      processing: true,
-    };
   }
 }

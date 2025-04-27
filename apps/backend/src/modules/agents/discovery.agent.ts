@@ -22,13 +22,13 @@ export class DiscoveryAgent {
     azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_RESOURCE,
     azureOpenAIApiDeploymentName:
       process.env.AZURE_OPENAI_DEPLOYMENT_REASONING_MODEL,
-    temperature: 0.5,
+    azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION,
   });
 
   async run(input: { message: string; language: string }): Promise<string> {
     const prompt = ChatPromptTemplate.fromMessages([
-      ['system', SYSTEM_PROMPT],
-      ['user', '{{message}}'],
+      ['system', SYSTEM_PROMPT.replace('{{ language }}', input.language)],
+      ['user', input.message],
     ]);
 
     const chain = prompt.pipe(this.llm);
