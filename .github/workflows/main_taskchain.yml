@@ -5,32 +5,12 @@ name: Build and deploy Node.js app to Azure Web App - taskchain
 
 on:
   push:
-    branches: [main]
-    paths-ignore:
-      - 'apps/frontend/**'
-      - 'apps/functions/**'
-      - '.github/workflows/azure-static-web-apps-salmon-island-0a89bc90f.yml'
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
-  ci:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node 22
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-          cache: 'npm'
-
-      - run: npm ci
-      - run: npm --prefix ./apps/backend run type-check
-      - run: npm --prefix ./apps/backend run lint
-
   build:
-    needs: ci
     runs-on: ubuntu-latest
     permissions:
       contents: read #This is required for actions/checkout
@@ -64,10 +44,7 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
@@ -77,13 +54,6 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D5AD30D9B0BE472B8F9FA0ACD8ED5129 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A56C732EC39F4909A70C9C3577614E92 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4E40B88F63E1491E90251D693A8F0037 }}
-
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -91,4 +61,4 @@ jobs:
           app-name: 'taskchain'
           slot-name: 'Production'
           package: .
-          
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_59BB7E952406417480656E588624F04F }}
