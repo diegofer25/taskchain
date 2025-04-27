@@ -19,7 +19,7 @@ interface UseTTSOptions {
 }
 
 export function useSpeech({
-  voice = 'en-US-NancyMultilingualNeural',
+  voice = 'pt-BR-ThalitaMultilingualNeural',
   format = sdk.SpeechSynthesisOutputFormat.Audio24Khz160KBitRateMonoMp3,
   onViseme,
   onCancel,
