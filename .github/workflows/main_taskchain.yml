@@ -5,11 +5,30 @@ name: Build and deploy Node.js app to Azure Web App - taskchain
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+    paths-ignore:
+      - 'apps/frontend/**'
+      - 'apps/functions/**'
+      - '.github/workflows/azure-static-web-apps-salmon-island-0a89bc90f.yml'
   workflow_dispatch:
 
 jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm --prefix ./apps/backend run type-check
+      - run: npm --prefix ./apps/backend run lint
+      
   build:
     runs-on: ubuntu-latest
     permissions:
