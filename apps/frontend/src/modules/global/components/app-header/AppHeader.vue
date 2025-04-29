@@ -1,5 +1,5 @@
 <template>
-  <Popover class="relative isolate z-50" v-slot="{ open }">
+  <Popover class="relative isolate z-30" v-slot="{ open }">
     <div class="flex justify-between items-center px-2 py-2 md:px-4 container mx-auto">
       <RouterLink to="/">
         <img :src="logoImage" alt="Taskchain logo" class="h-6 md:h-10 w-auto" />
