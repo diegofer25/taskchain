@@ -1,3 +1,4 @@
+import { i18n } from '@/i18n'
 import { useWaitTime } from '@/modules/global/composables/use-wait-time'
 import { useGlobalStore } from '@/modules/global/stores/global.store'
 import { AiVoiceState } from '@/modules/global/types/ai-voice.types'
@@ -8,8 +9,6 @@ import { SynthesisAdapterBase } from 'microsoft-cognitiveservices-speech-sdk/dis
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 interface UseTTSOptions {
-  /** Voice name (Nancy Multilingual by default) */
-  voice?: string
   /** Audio output format */
   format?: sdk.SpeechSynthesisOutputFormat
   /** Callback for viseme (lip sync) events */
@@ -19,7 +18,6 @@ interface UseTTSOptions {
 }
 
 export function useSpeech({
-  voice = 'pt-BR-ThalitaMultilingualNeural',
   format = sdk.SpeechSynthesisOutputFormat.Audio24Khz160KBitRateMonoMp3,
   onViseme,
   onCancel,
@@ -52,7 +50,6 @@ export function useSpeech({
     }
     const { token, region } = speechToken
     const speechConfig = sdk.SpeechConfig.fromAuthorizationToken(token, region)
-    speechConfig.speechSynthesisVoiceName = voice
     speechConfig.speechSynthesisOutputFormat = format
 
     const audioConfig = sdk.AudioConfig.fromDefaultSpeakerOutput()
@@ -71,9 +68,7 @@ export function useSpeech({
     return synthesizer
   }
 
-  /* ------------------------------------------------------------------ */
-  /* 4. Public API                                                      */
-  /* ------------------------------------------------------------------ */
+  // Public API
   async function speak(text: string) {
     lastError.value = null
     const synth = await getSynth()
@@ -81,7 +76,7 @@ export function useSpeech({
 
     return await new Promise(async (resolve, reject) => {
       try {
-        const ssml = synth.buildSsml(text)
+        const ssml = buildSsml(text)
         const results = await new Promise<sdk.SpeechSynthesisResult>((_resolve, _reject) => {
           synth.speakSsmlAsync(
             ssml,
@@ -121,9 +116,19 @@ export function useSpeech({
     }
   }
 
-  /* ------------------------------------------------------------------ */
-  /* 5. Automatic cleanup when the component is destroyed               */
-  /* ------------------------------------------------------------------ */
+  function buildSsml(text: string) {
+    const voice = getDefaultVoice()
+    const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${i18n.global.locale}'>
+      <voice name='${voice}'>
+        <prosody rate='0%' pitch='0%'>
+          <s>${text}</s>
+        </prosody>
+      </voice>
+    </speak>`
+    return ssml
+  }
+
+  //Automatic cleanup when the component is destroyed
   onBeforeUnmount(() => {
     synthesizer?.close()
     synthesizer = null
@@ -136,5 +141,15 @@ export function useSpeech({
     // State
     isSpeaking: computed(() => isSpeaking.value),
     lastError: computed(() => lastError.value),
+  }
+}
+
+function getDefaultVoice() {
+  if (i18n.global.locale === 'pt-BR') {
+    return 'pt-BR-ThalitaMultilingualNeural'
+  } else if (i18n.global.locale === 'es') {
+    return 'es-ES-XimenaMultilingualNeural'
+  } else {
+    return 'en-US-CoraMultilingualNeural'
   }
 }
