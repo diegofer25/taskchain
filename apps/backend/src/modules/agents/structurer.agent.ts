@@ -3,7 +3,7 @@ import { AzureChatOpenAI } from '@langchain/openai';
 import {
   TaskQuestions,
   TaskQuestionsSchema,
-} from 'src/modules/agents/agents.schema';
+} from 'src/modules/agents/agents.schemas';
 
 const SYSTEM_PROMPT = `
 ### 📝 ROLE

@@ -12,7 +12,7 @@ Generate a **brief and clear description of the context**, followed by a set of 
 ## 🛠️ Instructions
 1. **Reflect briefly (up to 4 lines)** on what essential information appears to be missing from the context.
 2. **Write a short introductory description (up to 5 lines)** summarizing the context and preparing the user for the questions that follow, in {{ language }}.
-3. **Generate up to 15 questions**, each starting with "- " (hyphen and space), also in {{ language }}.
+3. **Generate up to 8 questions**, each starting with "- " (hyphen and space), also in {{ language }}.
 4. Output ONLY the context description and the list of questions, plain text, no extra formatting.
 `;
 
