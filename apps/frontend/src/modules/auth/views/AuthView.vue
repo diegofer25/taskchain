@@ -1,5 +1,5 @@
 <template>
-  <div class="flex mt-40 justify-center container mx-auto px-4 py-8">
+  <div class="flex justify-center container mx-auto px-4 py-8">
     <div class="flex flex-col gap-3 max-w-80">
       <button
         v-for="provider in PROVIDERS"
@@ -18,7 +18,7 @@
 import { useAuthStore } from '@/modules/auth/stores/auth.store'
 import { useGlobalLoading } from '@/modules/global/composables/use-global-loading'
 import { useInteractionsStore } from '@/modules/global/stores/interactions.store'
-import { requestTokensDependentsOnFbToken } from '@/modules/global/utils/initialization.utils'
+import { requestTokensForAuthUser } from '@/modules/global/utils/initialization.utils'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
@@ -49,10 +49,10 @@ async function signIn(provider: Provider) {
       await microsoftSignIn()
     }
     show()
-    await requestTokensDependentsOnFbToken()
+    await requestTokensForAuthUser()
     hide()
 
-    router.push({ name: 'TasksHome' })
+    router.push({ name: 'TasksInput' })
   } catch (e) {
     console.error('Error signing in:', e)
 

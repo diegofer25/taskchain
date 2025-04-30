@@ -1,4 +1,4 @@
-import { waitForAuthCheck } from '@/modules/global/services/firebase.service'
+import { useAuthStore } from '@/modules/auth/stores/auth.store'
 import { fetchPubSubAuthToken } from '@/modules/global/services/pubsub.service'
 import { fetchSpeechToken } from '@/modules/global/services/speech.service'
 import { RuntimeLoader } from '@rive-app/webgl'
@@ -13,8 +13,8 @@ export async function loadAppDependencies({ riveUrl }: LoadAppDependenciesOption
     await Promise.all([
       // Rive WASM
       RuntimeLoader.awaitInstance(),
-      // Firebase, PubSub and Speech tokens
-      requestTokensDependentsOnFbToken(),
+      // Azure PubSub and Azure Speech tokens
+      requestTokensForAuthUser(),
       // Font loading
       new FontFaceObserver('Inter').load(),
     ])
@@ -25,14 +25,14 @@ export async function loadAppDependencies({ riveUrl }: LoadAppDependenciesOption
   }
 }
 
-export async function requestTokensDependentsOnFbToken() {
-  const user = await waitForAuthCheck()
+export async function requestTokensForAuthUser() {
+  const authStore = useAuthStore()
 
-  if (!user) {
+  if (!authStore.user) {
     return
   }
 
-  const fbToken = await user.getIdToken()
+  const fbToken = await authStore.user.getIdToken()
   const [pubSubToken, speechToken] = await Promise.all([
     fetchPubSubAuthToken(fbToken),
     fetchSpeechToken(fbToken),

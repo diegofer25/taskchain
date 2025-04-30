@@ -1,7 +1,10 @@
 <template>
   <Popover class="relative isolate z-30" v-slot="{ open }">
-    <div class="flex justify-between items-center px-2 py-2 md:px-4 container mx-auto">
-      <RouterLink to="/">
+    <div
+      class="flex justify-between items-center px-2 py-2 md:px-4 container mx-auto"
+      :class="{ 'justify-end': !authStore.isAuthenticated }"
+    >
+      <RouterLink to="/" v-if="authStore.isAuthenticated">
         <img :src="logoImage" alt="Taskchain logo" class="h-6 md:h-10 w-auto" />
       </RouterLink>
       <div class="max-w-7xl">

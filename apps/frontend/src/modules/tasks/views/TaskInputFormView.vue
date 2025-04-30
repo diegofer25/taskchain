@@ -1,19 +1,15 @@
 <template>
-  <form @submit.prevent class="flex flex-col min-w-80 w-full">
-    <div class="flex flex-col text-center">
-      <AppAiVoiceAnimation class="h-auto w-1/2 max-w-96 self-center" />
-    </div>
-
+  <form @submit.prevent class="flex flex-col min-w-80 w-full mt-16">
     <PromptInput v-model="goalInput" @key-enter="processUserGoal" />
 
     <canvas
-      :aria-disabled="!isGoalInputValid || apiFetch.isFetching.value"
+      :aria-disabled="!isGoalInputValid || isFetching"
       ref="buttonAnimationCanvasRef"
       class="self-end w-56"
       style="transform: translate(42px, -15px)"
       :class="{
-        'pointer-events-none opacity-50': !isGoalInputValid || apiFetch.isFetching.value,
-        'cursor-pointer opacity-100': isGoalInputValid || apiFetch.isFetching.value,
+        'pointer-events-none opacity-50': !isGoalInputValid || isFetching,
+        'cursor-pointer opacity-100': isGoalInputValid || isFetching,
       }"
     ></canvas>
   </form>
@@ -21,21 +17,23 @@
 
 <script lang="ts" setup>
 import { useAuthStore } from '@/modules/auth/stores/auth.store'
-import AppAiVoiceAnimation from '@/modules/global/components/AppAiVoiceAnimation.vue'
 import { useApiFetch } from '@/modules/global/composables/use-api-fetch'
 import { useRive } from '@/modules/global/composables/use-rive'
 import { useSpeech } from '@/modules/global/composables/use-speech'
 import { useGlobalStore } from '@/modules/global/stores/global.store'
 import { AiVoiceState } from '@/modules/global/types/ai-voice.types'
 import PromptInput from '@/modules/tasks/components/PromptInput.vue'
+import type { GenerateQuestionsResponse } from '@taskchain/types'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const { t, locale } = useI18n()
 const authStore = useAuthStore()
 const { speak } = useSpeech()
 const globalStore = useGlobalStore()
-const apiFetch = useApiFetch('/tasks', { immediate: false })
+const { isFetching, post, execute, data } = useApiFetch('/tasks', { immediate: false })
 const goalInput = ref<string>('')
 const buttonAnimationCanvasRef = ref<HTMLCanvasElement | null>(null)
 const startMessage = `${t('hello_name', { name: authStore.firstName })} ${t('taskchain_home_main_title')}`
@@ -66,14 +64,13 @@ const { getInstance } = useRive({
 async function processUserGoal() {
   console.log('Processing user goal:', goalInput.value)
   globalStore.aiVoiceState = AiVoiceState.THINKING
-  const response = await apiFetch
-    .post({
-      message: goalInput.value,
-      language: locale.value,
-    })
-    .json()
-    .execute()
+  post({
+    message: goalInput.value,
+    language: locale.value,
+  })
+  await execute()
+  const { processId } = JSON.parse(data.value as string) as GenerateQuestionsResponse
 
-  console.log('Response:', response)
+  router.push(`/questions/${processId}`)
 }
 </script>

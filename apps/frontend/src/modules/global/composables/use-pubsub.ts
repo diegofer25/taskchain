@@ -7,16 +7,10 @@ import {
   type OnServerDataMessageArgs,
   WebPubSubClient,
 } from '@azure/web-pubsub-client'
-import type { AuthPubSubResponse } from '@taskchain/types'
+import type { AuthPubSubResponse, PubSubEvent } from '@taskchain/types'
 import { useStorage } from '@vueuse/core'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-
-/** Generic pub-sub payload */
-export interface PubSubEvent<T = unknown> {
-  event: string
-  data: T
-}
 
 const MAX_RETRIES = 5
 

@@ -1,6 +1,7 @@
 import App from '@/App.vue'
 import '@/assets/main.css'
 import { i18n } from '@/i18n'
+import { useAuthStore } from '@/modules/auth/stores/auth.store'
 import { waitForAuthCheck } from '@/modules/global/services/firebase.service'
 import { ConfirmationPlugin } from '@/plugins/confirmation.plugin'
 import { GlobalLoadingPlugin } from '@/plugins/global-loading.plugin'
@@ -14,4 +15,8 @@ const app = createApp(App)
   .use(ConfirmationPlugin)
   .use(GlobalLoadingPlugin)
 
-waitForAuthCheck().then(() => app.use(router).mount('#app'))
+waitForAuthCheck().then((user) => {
+  const authStore = useAuthStore()
+  authStore.setUser(user)
+  app.use(router).mount('#app')
+})

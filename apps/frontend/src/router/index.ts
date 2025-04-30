@@ -10,10 +10,11 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isGuestOpen = to.matched.some((record) => record.meta.isGuestOpen)
   const authStore = useAuthStore()
+
   if (!isGuestOpen && !authStore.isAuthenticated) {
     next({ name: 'Auth' })
   } else if (to.name === 'Auth' && authStore.isAuthenticated) {
-    next({ name: 'TasksHome' })
+    next({ name: 'TasksInput' })
   } else {
     next()
   }

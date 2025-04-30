@@ -15,26 +15,6 @@ export const useAuthStore = defineStore('auth', () => {
   const firstName = computed(() => user.value?.displayName?.split(' ')[0] || '')
   const lastName = computed(() => user.value?.displayName?.split(' ')[1] || '')
 
-  auth.onAuthStateChanged(async (_user) => {
-    if (_user) {
-      user.value = _user
-
-      // if (
-      //   _user.providerData[0]?.providerId === 'microsoft.com' &&
-      //   storedMsOAuthCredential.value.accessToken
-      // ) {
-      //   try {
-      //     const photoURL = await fetchMsUserProfilePicture(
-      //       storedMsOAuthCredential.value.accessToken,
-      //     )
-      //     setUser({ ..._user, photoURL })
-      //   } catch (error) {
-      //     console.error('Error fetching Microsoft user profile picture:', error)
-      //   }
-      // }
-    }
-  })
-
   return {
     isAuthenticated,
     user,
@@ -43,6 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
     googleSignIn,
     microsoftSignIn,
     signOut,
+    setUser,
   }
 
   function setUser(_user: User | null) {
@@ -60,14 +41,6 @@ export const useAuthStore = defineStore('auth', () => {
     provider.addScope('Calendars.ReadWrite')
 
     return signInWithPopup(auth, provider)
-    // const credential = OAuthProvider.credentialFromResult(response)
-
-    // if (credential && credential.accessToken) {
-    //   storedMsOAuthCredential.value = credential
-
-    //   const photoURL = await fetchMsUserProfilePicture(credential.accessToken)
-    //   setUser({ ...response.user, photoURL })
-    // }
   }
 
   async function signOut() {
