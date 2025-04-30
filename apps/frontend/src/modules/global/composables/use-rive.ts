@@ -153,6 +153,8 @@ export function useRive<I extends ReadonlyArray<StrictInput>>(options: UseRiveOp
 
 // region Types
 
+export type RiveInstance = ReturnType<typeof useRive>
+
 export interface StrictInput {
   readonly name: string
   readonly type: StateMachineInputType

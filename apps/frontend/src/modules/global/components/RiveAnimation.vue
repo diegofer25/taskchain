@@ -2,8 +2,9 @@
   <canvas ref="canvasRef"></canvas>
 </template>
 
-<script lang="ts" setup>
-import { useRive, type StrictInput } from '@/modules/global/composables/use-rive'
+<script lang="ts" setup generic="T extends Readonly<StrictInput[]>">
+import { useRive, type RiveInstance, type StrictInput } from '@/modules/global/composables/use-rive'
+import type { Event } from '@rive-app/webgl'
 import { ref } from 'vue'
 
 interface Props {
@@ -11,21 +12,24 @@ interface Props {
   autoplay?: boolean
   stateMachineName?: string
   autoBind?: boolean
-  inputs?: StrictInput[]
+  inputs?: T
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits(['loaded', 'stateChange'])
+const emit = defineEmits<{
+  (e: 'loaded', instance: RiveInstance): void
+  (e: 'stateChange', event: Event): void
+}>()
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-useRive({
+const instance = useRive({
   canvasRef,
   src: props.src,
   stateMachineName: props.stateMachineName,
   autoplay: props.autoplay || undefined,
   autoBind: props.autoBind || undefined,
   inputs: props.inputs,
-  onLoad: (rive) => emit('loaded', rive),
+  onLoad: () => emit('loaded', instance),
   onStateChange: (event) => emit('stateChange', event),
 })
 </script>
