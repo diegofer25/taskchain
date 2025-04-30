@@ -28,14 +28,18 @@ import AppHeaderOption from '@/modules/global/components/app-header/AppHeaderOpt
 import AppLanguageSelector from '@/modules/global/components/AppLanguageSelector.vue'
 import AppThemeToggle from '@/modules/global/components/AppThemeToggle.vue'
 import { useConfirmation } from '@/modules/global/composables/use-confirmation'
+import { useSpeech } from '@/modules/global/composables/use-speech'
+import { useTasksStore } from '@/modules/tasks/stores/tasks.store'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/16/solid'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
-const router = useRouter()
 const { confirm } = useConfirmation()
+const router = useRouter()
+const { isSpeaking, disconnect } = useSpeech()
 const authStore = useAuthStore()
+const tasksStore = useTasksStore()
 
 async function signOut() {
   const confirmed = await confirm({
@@ -44,7 +48,11 @@ async function signOut() {
     confirmText: t('yes'),
   })
   if (confirmed) {
-    await authStore.signOut()
+    if (isSpeaking.value) {
+      disconnect()
+    }
+
+    await Promise.all([tasksStore.stopListeningAndDisconnect(), authStore.signOut()])
     await router.push({ name: 'Auth' })
   }
 }

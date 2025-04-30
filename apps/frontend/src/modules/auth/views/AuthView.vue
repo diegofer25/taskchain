@@ -49,7 +49,7 @@ async function signIn(provider: Provider) {
       await microsoftSignIn()
     }
     show()
-    await requestTokensForAuthUser()
+    await requestTokensForAuthUser(true)
     hide()
 
     router.push({ name: 'TasksInput' })

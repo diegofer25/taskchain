@@ -26,6 +26,6 @@ export const useTasksStore = defineStore('tasks', () => {
   }
 
   function stopListeningAndDisconnect() {
-    pubsub.disconnect()
+    return pubsub.disconnect()
   }
 })

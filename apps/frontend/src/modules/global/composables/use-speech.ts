@@ -5,29 +5,28 @@ import { AiVoiceState } from '@/modules/global/types/ai-voice.types'
 import type { SpeechToken } from '@taskchain/types'
 import { useStorage } from '@vueuse/core'
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
-import { SynthesisAdapterBase } from 'microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common.speech/SynthesisAdapterBase'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 interface UseTTSOptions {
-  /** Audio output format */
   format?: sdk.SpeechSynthesisOutputFormat
-  /** Callback for viseme (lip sync) events */
   onViseme?: (visemeId: number, audioOffset: number) => void
-  /** Callback for speech synthesis events */
-  onCancel?: (sender: sdk.SpeechSynthesizer, event: sdk.SpeechSynthesisEventArgs) => void
 }
+
+// Maintains a single instance of synthesizer while speaking
+let synthesizer: sdk.SpeechSynthesizer | null = null
+const onVisemeCallbacks: ((visemeId: number, audioOffset: number) => void)[] = []
+const isSpeaking = ref(false)
+const lastError = ref<Error | null>(null)
 
 export function useSpeech({
   format = sdk.SpeechSynthesisOutputFormat.Audio24Khz160KBitRateMonoMp3,
   onViseme,
-  onCancel,
 }: UseTTSOptions = {}) {
   const globalStore = useGlobalStore()
-  const isSpeaking = ref(false)
-  const lastError = ref<Error | null>(null)
 
-  // Maintains a single instance of synthesizer while speaking
-  let synthesizer: sdk.SpeechSynthesizer | null = null
+  if (onViseme) {
+    onVisemeCallbacks.push(onViseme)
+  }
 
   getSynth().then((s) => (synthesizer = s))
 
@@ -38,6 +37,21 @@ export function useSpeech({
       globalStore.aiVoiceState = AiVoiceState.IDLE
     }
   })
+
+  //Automatic cleanup when the component is destroyed
+  onBeforeUnmount(() => {
+    synthesizer?.close()
+    synthesizer = null
+  })
+
+  return {
+    // Methods
+    speak,
+    disconnect,
+    // State
+    isSpeaking: computed(() => isSpeaking.value),
+    lastError: computed(() => lastError.value),
+  }
 
   // SpeechSynthesizer factory
   async function getSynth(): Promise<sdk.SpeechSynthesizer> {
@@ -55,14 +69,10 @@ export function useSpeech({
     const audioConfig = sdk.AudioConfig.fromDefaultSpeakerOutput()
     synthesizer = new sdk.SpeechSynthesizer(speechConfig, audioConfig)
 
-    // Optional: viseme events
-    if (onViseme) {
-      synthesizer.visemeReceived = (_, e) => onViseme(e.visemeId, Number(e.audioOffset))
-    }
-
-    // Optional: cancel events
-    if (onCancel) {
-      synthesizer.SynthesisCanceled = (_, e) => onCancel(synthesizer!, e)
+    synthesizer.visemeReceived = (_, e) => {
+      onVisemeCallbacks.forEach((callback) => {
+        callback(e.visemeId, Number(e.audioOffset))
+      })
     }
 
     return synthesizer
@@ -100,47 +110,23 @@ export function useSpeech({
     })
   }
 
-  async function cancel() {
-    if (synthesizer && isSpeaking.value) {
-      const adapter = synthesizer['privAdapter']
-      if (adapter && adapter instanceof SynthesisAdapterBase) {
-        console.log('Canceling speech', adapter)
-        await adapter.stopSpeaking()
-        isSpeaking.value = false
-      }
-
-      console.log('Canceling speech', synthesizer)
-      // synthesizer.stopSpeakingAsync(() => {
-      //   isSpeaking.value = false
-      // })
-    }
-  }
-
   function buildSsml(text: string) {
     const voice = getDefaultVoice()
     const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='${i18n.global.locale}'>
-      <voice name='${voice}'>
-        <prosody rate='0%' pitch='0%'>
-          <s>${text}</s>
-        </prosody>
-      </voice>
-    </speak>`
+        <voice name='${voice}'>
+          <prosody rate='0%' pitch='0%'>
+            <s>${text}</s>
+          </prosody>
+        </voice>
+      </speak>`
     return ssml
   }
 
-  //Automatic cleanup when the component is destroyed
-  onBeforeUnmount(() => {
-    synthesizer?.close()
-    synthesizer = null
-  })
-
-  return {
-    // Methods
-    speak,
-    cancel,
-    // State
-    isSpeaking: computed(() => isSpeaking.value),
-    lastError: computed(() => lastError.value),
+  function disconnect() {
+    if (synthesizer) {
+      synthesizer.close()
+      synthesizer = null
+    }
   }
 }
 

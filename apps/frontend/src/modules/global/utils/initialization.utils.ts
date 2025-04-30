@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/modules/auth/stores/auth.store'
+import { waitForAuthCheck } from '@/modules/global/services/firebase.service'
 import { fetchPubSubAuthToken } from '@/modules/global/services/pubsub.service'
 import { fetchSpeechToken } from '@/modules/global/services/speech.service'
 import { RuntimeLoader } from '@rive-app/webgl'
@@ -25,14 +26,20 @@ export async function loadAppDependencies({ riveUrl }: LoadAppDependenciesOption
   }
 }
 
-export async function requestTokensForAuthUser() {
+export async function requestTokensForAuthUser(waitForUser = true) {
   const authStore = useAuthStore()
+  let user = authStore.user
 
-  if (!authStore.user) {
+  if (waitForUser) {
+    user = await waitForAuthCheck()
+    authStore.setUser(user)
+  }
+
+  if (!user) {
     return
   }
 
-  const fbToken = await authStore.user.getIdToken()
+  const fbToken = await user.getIdToken()
   const [pubSubToken, speechToken] = await Promise.all([
     fetchPubSubAuthToken(fbToken),
     fetchSpeechToken(fbToken),

@@ -46,9 +46,13 @@ export function usePubSub() {
     groups[group] = cb
   }
 
-  function disconnect() {
-    Object.keys(groups).forEach((g) => client.leaveGroup(g))
+  async function disconnect() {
+    await Promise.all(Object.keys(groups).map((g) => client.leaveGroup(g)))
+    client.off('server-message', handleServerMsg)
+    client.off('group-message', handleGroupMsg)
+    client.off('disconnected', onDisconnected)
     client.stop()
+    isConnected.value = false
   }
 
   /** ---------- internal plumbing ---------- */
