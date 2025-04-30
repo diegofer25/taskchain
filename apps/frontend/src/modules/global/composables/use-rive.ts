@@ -153,7 +153,7 @@ export function useRive<I extends ReadonlyArray<StrictInput>>(options: UseRiveOp
 
 // region Types
 
-interface StrictInput {
+export interface StrictInput {
   readonly name: string
   readonly type: StateMachineInputType
   readonly defaultValue?: number | boolean | string
