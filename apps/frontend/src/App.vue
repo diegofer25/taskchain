@@ -9,10 +9,12 @@
 import AppInteractions from '@/modules/global/components/app-interactions/AppInteractions.vue'
 import { useGlobalLoading } from '@/modules/global/composables/use-global-loading'
 import { loadAppDependencies } from '@/modules/global/utils/initialization.utils'
-import { onMounted, ref } from 'vue'
+import { useTasksStore } from '@/modules/tasks/stores/tasks.store'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { RouterView } from 'vue-router'
 
 const { show, hide } = useGlobalLoading()
+const tasksStore = useTasksStore()
 const loaded = ref(false)
 
 onMounted(async () => {
@@ -31,5 +33,9 @@ onMounted(async () => {
   } finally {
     hide()
   }
+})
+
+onBeforeUnmount(() => {
+  tasksStore.stopListeningAndDisconnect()
 })
 </script>

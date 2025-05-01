@@ -36,7 +36,6 @@ export function usePubSub() {
     listenServerMessage,
   }
 
-  /** ---------- public helpers ---------- */
   function listenServerMessage(cb: (d: PubSubEvent) => void) {
     serverHandlers.push(cb)
   }
@@ -55,7 +54,6 @@ export function usePubSub() {
     isConnected.value = false
   }
 
-  /** ---------- internal plumbing ---------- */
   async function connect() {
     if (isConnected.value || connecting) return
     connecting = true
@@ -84,9 +82,9 @@ export function usePubSub() {
     }
   }
 
-  /** ---------- event handlers ---------- */
   function handleServerMsg({ message }: OnServerDataMessageArgs) {
-    dispatchHandlers(serverHandlers, message.data)
+    console.log('Received message from server:', message, serverHandlers)
+    dispatchHandlers(serverHandlers, message)
   }
 
   function handleGroupMsg({ message }: OnGroupDataMessageArgs) {
@@ -108,7 +106,6 @@ export function usePubSub() {
     isConnected.value = false
   }
 
-  /** ---------- utilities ---------- */
   function dispatchHandlers(cbs: ((d: PubSubEvent) => void)[], raw: unknown) {
     if (isEvent(raw)) cbs.forEach((cb) => cb(raw))
   }

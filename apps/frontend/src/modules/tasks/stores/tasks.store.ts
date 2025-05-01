@@ -6,15 +6,14 @@ export const useTasksStore = defineStore('tasks', () => {
   const pubsub = usePubSub()
   // const globalStore = useGlobalStore()
 
-  window.addEventListener('beforeunload', stopListeningAndDisconnect)
-  window.addEventListener('unload', stopListeningAndDisconnect)
-
   return {
     startListeningAndConnect,
     stopListeningAndDisconnect,
   }
 
   function startListeningAndConnect() {
+    window.addEventListener('beforeunload', stopListeningAndDisconnect)
+
     pubsub.listenGroupMessage('tasks', (message) => {
       console.log('Received message from group:', message)
     })
@@ -25,7 +24,11 @@ export const useTasksStore = defineStore('tasks', () => {
     return pubsub.connect()
   }
 
-  function stopListeningAndDisconnect() {
+  function stopListeningAndDisconnect(e?: BeforeUnloadEvent) {
+    if (e) {
+      e.preventDefault()
+      window.removeEventListener('beforeunload', stopListeningAndDisconnect)
+    }
     return pubsub.disconnect()
   }
 })
